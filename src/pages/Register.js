@@ -19,6 +19,24 @@ const Register = () => {
       return;
     }
     try {
+      alert('Một email xác thực đã được gửi đến hòm thư của bạn. Vui lòng kiểm tra và nhập mã xác thực để hoàn tất đăng ký!');
+       const emailVerificationResponse = await fetch('http://localhost:8080/send-verification-email', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              email: email,
+          }),
+        });
+
+        if (!emailVerificationResponse.ok) {
+            throw new Error('Failed to send verification email');
+      }
+      
+
+
+
       const response = await fetch('http://localhost:8080/register', {
         method: 'POST',
         headers: {
@@ -30,11 +48,14 @@ const Register = () => {
           active: "true",
           firstName: firstName,
           lastName: lastName,
+          email: email
         }),
       });
 
       if (response.ok) {
-        alert('User registered!');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 10000); // 10 giây
       } else {
         const data = await response.json();
         alert('Failed to register user: ' + data.error);
