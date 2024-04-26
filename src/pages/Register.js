@@ -53,9 +53,9 @@ const Register = () => {
       });
 
       if (response.ok) {
-        setTimeout(() => {
+        // setTimeout(() => {
             window.location.href = '/login';
-        }, 10000); // 10 giây
+        // }, 10000); // 10 giây
       } else {
         const data = await response.json();
         alert('Failed to register user: ' + data.error);
