@@ -6,10 +6,9 @@ import { MdOutlineAddCircleOutline } from "react-icons/md";
 import thumnail from '../assets/images/thumnail.png'
 import { IoIosCloudUpload } from "react-icons/io";  
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import vLogin from '../assets/video/vLogin.mp4'
 import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
-
+import { IoMdMenu } from "react-icons/io";
 
 const Profile = () => {
     const userToken = localStorage.getItem('userToken');
@@ -87,7 +86,7 @@ const Profile = () => {
                 <div className=' justify-center flex font-light text-[18px] '>
                         <div>
                             <p className=" mt-[60px] text-[30px] font-bold w-auto mb-2 size-[25px]">{fn +" "+ ln}</p>
-                            <p className="mb-2 mt-[20px]  ">Username: dangnguyen03</p>
+                            <p className="mb-2 mt-[20px]  ">  Username: dangnguyen03  </p>
                             <p className="mb-2 mt-[0px]  ">Email: 21520683@gm.uit.edu.vn</p>
 
                             <div className='flex text-[20px] items-center font-Oswald font-medium mt-[10px] justify-between'>
@@ -163,6 +162,50 @@ const Profile = () => {
                                 <br/>21520623 - Tạ Đức Bảo </p>
                         </p>
                     </div>
+                </div>
+            </div>
+            <div className='flex justify-center font-normal font-Oswald text-[#717171]'>
+                <div className=' flex items-center pl-[20px]  font-bold pt-[20px] w-3/5 bg-white text-black font-sans'>
+                    <p className='mr-[10px]  text-[20px]'>VIDEO KHÁC</p>    
+                    <IoMdMenu className='cursor-pointer size-[25px]' />
+                </div>
+            </div>
+            <div className='flex justify-center font-normal font-Oswald text-[#717171]'>
+                <div className='w-3/5 bg-white flex flex-col'>
+                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto ml-[20px] mr-2  '>
+                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[18px]'>Tên người chủ</p>
+                            <div className='flex justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto ml-[20px] mr-2  '>
+                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[18px]'>Tên người chủ</p>
+                            <div className='flex justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto ml-[20px] mr-2  '>
+                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[18px]'>Tên người chủ</p>
+                            <div className='flex justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>   
+                   
                 </div>
             </div>
         </div>
