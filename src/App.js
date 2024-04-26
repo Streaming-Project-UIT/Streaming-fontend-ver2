@@ -7,6 +7,7 @@ import UploadVideo from './pages/UploadVideo';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import React, { useEffect } from 'react';
+import Main from './pages/Main';
 function App() {
   useEffect(() => {
     document.title = "Video sharing";
@@ -20,6 +21,7 @@ function App() {
         <Route path="/upload" element={<UploadVideo />} />
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/main" element={<Main />} />
       </Routes>
     </Router>
     );

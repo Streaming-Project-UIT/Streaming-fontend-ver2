@@ -7,12 +7,15 @@ import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
 import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
-
+import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const [videoUrls, setVideoUrls] = useState([]);
   const [showVideo, setShowVideo] = useState(false);
   const [videoIds, setVideoIds] = useState([]);
-
+  const [checkLogined, setCheckLogined] = useState(false);
+  const userToken = localStorage.getItem('userToken');
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchVideoIds = async () => {
       try {
@@ -49,10 +52,21 @@ const Home = () => {
       window.removeEventListener('resize', resizeVideo);
     };
   }, []);
+  const checkLoginedFunc = async () => {
+    if (userToken) {
+      setCheckLogined(true);
+      // goi api tang so luong follow
+    }
+    else {
+      setCheckLogined(false);
+      navigate('/login');
+    }
+  }
 
   const generateVideoUrls = () => {
     return videoIds.map((id) => `http://localhost:8080/video/get/${id}`);
   };
+
 
   return (
     <div>
@@ -81,7 +95,7 @@ const Home = () => {
                       <p className='text-[20px] '>Nguyễn Thành Đăng</p>
                       <p className='text-[#606060]'>Theo dõi: 4k</p>
                     </div>
-                    <button className='flex  items-center ml-[15px] bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[15px]'>
+                    <button onClick = {checkLoginedFunc} className='flex  items-center ml-[15px] bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[15px]'>
                                         Theo dõi                                    
                                     <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/>
                                     </button>
