@@ -7,6 +7,8 @@ import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
 import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { IoMdMenu } from "react-icons/io";
+import { LuMoveRight } from "react-icons/lu";
 
 const Home = () => {
   const [videoUrls, setVideoUrls] = useState([]);
@@ -57,116 +59,165 @@ const Home = () => {
   return (
     <div>
       <NavbarApp/>
-      <div className='h-[60px] '></div>
-      <div className='px-[60px] py-[20px] flex'>
-        <div className='w-8/12'>
-            <div className=' h-auto bg-black'>
-                <video src ={st} controls  
-                    autoPlay
-                    muted
-                    loop
-                    style={{ height: '450px' }}
-                    className=' pb-[15px] w-full h-full'
-                    type="video/mp4"/>
-            </div>
-            <p className='font-medium font-roboto my-[10px]  bg-white  text-[24px]'>
-                Sơn Tùng MTP | Chúng ta của tương lai
-                </p>
-            <hr></hr>
-            <div className='font-roboto flex justify-between bg-white pb-[15px] px-[5px] pt-[10px]'>
-                <div>
-                  <div className='flex items-center gap-4'>
-                    <img alt='avar' src={avar} className='rounded-[50%] size-[50px]'/>
-                    <div>
-                      <p className='text-[20px] '>Nguyễn Thành Đăng</p>
-                      <p className='text-[#606060]'>Theo dõi: 4k</p>
+      <div className='h-[60px]'></div>
+      <div className=' flex items-center my-3 pl-[20px]  font-bold pt-[20px] w-3/5 text-black font-bold'>
+                <IoMdMenu className='cursor-pointer size-[25px]' />
+                <p className='ml-[10px] text-[#474747] text-[20px]'>Top video tiêu biểu</p>    
+      </div>
+
+      <div className='flex relative mr-3'>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
                     </div>
-                    <button className='flex  items-center ml-[15px] bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[15px]'>
-                                        Theo dõi                                    
-                                    <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/>
-                                    </button>
-                  </div>
-                </div>
-                <div className='flex '>
-                    <button className='items-center h-[50px]  flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
-                        Thích
-                        <AiOutlineLike className='size-[30px] ml-[5px]'/>
-                    </button>
-                    <button className='items-center h-[50px] ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
-                        Chia sẻ
-                        <CiShare1 className='size-[30px] ml-[5px]'/>
-                    </button>        
-                </div>
-            </div>
-            <div className=' bg-white'>
-                <p className='font-medium rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
-                20 tỷ views | Ngày 20, 3 năm 2024
-                    <br/>
-                    <p className='leading-6 mt-[5px] font-normal'>Đây là website do nhóm bq2d làm. Môn SE330<br/> 212520683 - Nguyễn Thành Đăng
-                        <br/>21520714 - Trịnh Tấn Đạt 
-                        <br/>21520421 - Nguyễn Trần Bảo Quốc
-                        <br/>21520623 - Tạ Đức Bảo </p>
-                </p>
-            </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
         </div>
 
+       
 
 
-        <div className='w-1/3 flex flex-col'>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-          </div>
+        <LuMoveRight className='absolute right-[-12px] border border-[#474747] top-[35%] rounded-[50%] cursor-pointer p-2 bg-[#f0f4f9] size-[50px]'/>
 
       </div>
-        {/* <div>
-        {generateVideoUrls().map((url, index) => (
-          <video key={index} controls>
-            <source src={url} type="video/mp4" />
-          </video>
-        ))}
-        </div> */}
+
+      <div className=' flex items-center mb-3 pl-[20px]  font-bold pt-[20px] w-3/5 text-black font-bold'>
+                <IoMdMenu className='cursor-pointer size-[25px]' />
+                <p className='ml-[10px] text-[#474747] text-[20px]'>Dòng thời gian</p>    
+      </div>
+
+
+      <div className='flex flex-wrap mr-3'>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+        <div className='w-3/12  flex'>
+            <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4  drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                    <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                    <div className='font-roboto  mr-2  '>
+                        <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                        <p className='text-[16px] mt-1'>Tên người chủ</p>
+                        <div className='flex  text-[16px] justify-between'>
+                            <p>Lượt xem</p>
+                            <p>2 ngày trước</p>
+                        </div>
+                    </div>
+                </div>                 
+        </div>
+       
+
+
+
+      </div>
+
+
     </div>
   );
 };

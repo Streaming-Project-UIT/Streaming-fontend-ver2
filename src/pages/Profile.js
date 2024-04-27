@@ -151,12 +151,12 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex justify-center w-auto'>
-                    <div className='w-3/5 bg-white'>
+                <div className='flex justify-center w-auto '>
+                    <div className='w-3/5 bg-white pb-4 rounded-[10px] shadow-xl'>
                         <p className='font-medium mx-[20px] rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
                         20 tỷ views | Ngày 20, 3 năm 2024
                             <br/>
-                            <p className='leading-6 mt-[5px] font-normal'>Đây là website do nhóm bq2d làm. Môn SE330<br/> 212520683 - Nguyễn Thành Đăng
+                            <p className='leading-6 mt-[5px] font-normal '>Đây là website do nhóm bq2d làm. Môn SE330<br/> 212520683 - Nguyễn Thành Đăng
                                 <br/>21520714 - Trịnh Tấn Đạt 
                                 <br/>21520421 - Nguyễn Trần Bảo Quốc
                                 <br/>21520623 - Tạ Đức Bảo </p>
@@ -164,47 +164,137 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-            <div className='flex justify-center font-normal font-Oswald text-[#717171]'>
-                <div className=' flex items-center pl-[20px]  font-bold pt-[20px] w-3/5 bg-white text-black font-sans'>
-                    <p className='mr-[10px]  text-[20px]'>VIDEO KHÁC</p>    
-                    <IoMdMenu className='cursor-pointer size-[25px]' />
-                </div>
+
+
+            <div className=' flex items-center my-3 pl-[20px]  font-bold pt-[20px] w-3/5 text-black font-sans'>
+                <p className='mr-[10px]  text-[20px]'>VIDEO KHÁC</p>    
+                <IoMdMenu className='cursor-pointer size-[25px]' />
             </div>
-            <div className='flex justify-center font-normal font-Oswald text-[#717171]'>
-                <div className='w-3/5 bg-white flex flex-col'>
-                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
-                        <div className='font-roboto ml-[20px] mr-2  '>
-                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                            <p className='text-[18px]'>Tên người chủ</p>
-                            <div className='flex justify-between'>
+            <div className='flex flex-wrap mx-5 font-normal font-Oswald text-[#717171]'>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className='  rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
                                 <p>Lượt xem</p>
                                 <p>2 ngày trước</p>
                             </div>
                         </div>
-                    </div>
-                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
-                        <div className='font-roboto ml-[20px] mr-2  '>
-                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                            <p className='text-[18px]'>Tên người chủ</p>
-                            <div className='flex justify-between'>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
                                 <p>Lượt xem</p>
                                 <p>2 ngày trước</p>
                             </div>
                         </div>
-                    </div>
-                    <div className='p-[50px]  flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                        <img className='w-3/5 rounded-[20px]' src={thumnail} alt='other'/>
-                        <div className='font-roboto ml-[20px] mr-2  '>
-                            <p className='text-[24px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                            <p className='text-[18px]'>Tên người chủ</p>
-                            <div className='flex justify-between'>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
                                 <p>Lượt xem</p>
                                 <p>2 ngày trước</p>
                             </div>
                         </div>
-                    </div>   
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
+                   
+                </div>
+                <div className='w-3/12  flex'>
+                    <div className='p-[15px] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
+                        <img className=' rounded-[20px]' src={thumnail} alt='other'/>
+                        <div className='font-roboto  mr-2  '>
+                            <p className='text-[18px] font-medium text-black mt-3 leading-6'>Sơn Tùng MTP | Chúng ta của tương lai</p>
+                            <p className='text-[16px] mt-1'>Tên người chủ</p>
+                            <div className='flex  text-[16px] justify-between'>
+                                <p>Lượt xem</p>
+                                <p>2 ngày trước</p>
+                            </div>
+                        </div>
+                    </div>                 
                    
                 </div>
             </div>
