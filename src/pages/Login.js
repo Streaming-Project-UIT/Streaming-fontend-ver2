@@ -4,9 +4,7 @@ import logo from '../assets/images/logo.png'
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
   
-    const handleNavigate = () => {
-        
-    };
+
     const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
