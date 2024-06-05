@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import NavbarApp from '../component/NavbarApp'
+import NavbarApp from '../components/NavbarApp'
 import thumnail from '../assets/images/thumnail.png'
 import { IoIosCloudUpload } from "react-icons/io";  
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";

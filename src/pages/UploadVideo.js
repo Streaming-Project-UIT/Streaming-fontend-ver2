@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NavbarApp from '../component/NavbarApp'
+import NavbarApp from '../components/NavbarApp'
 
 
 const UploadVideo = () => {

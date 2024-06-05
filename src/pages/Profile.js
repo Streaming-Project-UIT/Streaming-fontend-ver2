@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Navbar from '../component/NavbarApp';
+import Navbar from '../components/NavbarApp';
 import bgWall from '../assets/images/bgWall.jpg'
 import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import NavbarApp from '../component/NavbarApp';
+import NavbarApp from '../components/NavbarApp';
 import { IoMdMenu } from "react-icons/io";
 import { LuMoveRight } from "react-icons/lu";
 
