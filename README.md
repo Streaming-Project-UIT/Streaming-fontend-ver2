@@ -1,2 +1,2 @@
-# Streaming-fontend-ver2
-Streaming-fontend-ver2
+# Video-Sharing-frontend
+Video-Sharing-frontend
