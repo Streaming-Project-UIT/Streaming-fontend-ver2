@@ -3,10 +3,12 @@ import NavbarApp from '../components/NavbarApp';
 import { IoMdMenu } from "react-icons/io";
 import { LuMoveRight } from "react-icons/lu";
 import VideoComponent from '../components/VideoComponent';
-
+import Loading from '../components/Loading';
 
 const Home = () => {
   const [videoIds, setVideoIds] = useState([]);
+  const [values, setValueIds] = useState();
+
   const [videoUrls, setVideoUrls] = useState([]);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef(null);
@@ -14,23 +16,50 @@ const Home = () => {
 
   const [urlVideo, setUrlVideo] = useState()
 
+  // useEffect(() => {
+  //   const fetchVideoIds = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:8080/video/listIdThumbnail')
+  //       if (response.ok) {
+  //         const ids = await response.json();
+  //         setVideoIds(ids);
+  //       } else {
+  //         console.error('Failed to fetch video ids');
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch video ids:', error);
+  //     }
+  //   };
+
+  //   fetchVideoIds();
+  // }, []);
   useEffect(() => {
     const fetchVideoIds = async () => {
       try {
         const response = await fetch('http://localhost:8080/video/listIdThumbnail');
-        if (response.ok) {
-          const ids = await response.json();
-          setVideoIds(ids);
-        } else {
-          console.error('Failed to fetch video ids');
+        if (!response.ok) {
+          throw new Error('Failed to fetch video ids');
         }
+        const ids = await response.json();
+        setVideoIds(ids);
+        const fetchDataPromises = ids.map(async id => {
+          console.log(id)
+          const response = await fetch(`http://localhost:8080/video/getDetails/${id}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data for id: ${id}`);
+          }
+          return response.json();
+        });
+        const data = await Promise.all(fetchDataPromises);
+        setValueIds(data);
       } catch (error) {
-        console.error('Failed to fetch video ids:', error);
+        console.error('Failed to fetch video ids or data:', error);
       }
     };
-
+  
     fetchVideoIds();
   }, []);
+  
 
   useEffect(() => {
     const video = videoRef.current;
@@ -51,21 +80,15 @@ const Home = () => {
 
 
   const generateThumbnailUrls = () => {
-    return videoIds.map((id) => `http://localhost:8080/video/get/${id}`);
+    return videoIds.map((id) => {
+      return  `http://localhost:8080/video/get/${id}`
+      });
   };
+  
 
-  // const handleClick = async (index) => {
-  //   setVideoUrls(generateThumbnailUrls());
-  //   setShowVideo(true);
-  //   const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + videoIds[index];
-  //   const response = await fetch(apiUrl);
-  //   const result = await response.text();
-  //   const apiVideo = "http://localhost:8080/video/get/" + result;
-  //   setUrlVideo(apiVideo);
-  //   console.log(apiVideo);
-  // };
+  const thumbnails =  generateThumbnailUrls();
 
-  const thumbnails = generateThumbnailUrls();
+  
 
   return (
     <div>
@@ -77,29 +100,21 @@ const Home = () => {
       </div>
 
       <div className='flex relative mr-3'> 
-        {thumbnails.slice(0, 4).map((url, index) => (
-          // <div key={index} className='w-3/12 flex'>
-          //   <div
-          //     className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 mt-4 drop-shadow-lg rounded-[10px] cursor-pointer'
-          //     onClick={() => handleClick(index)}
-          //   >
-          //     <img className='rounded-[20px]' src={url} alt={`Thumbnail ${index}`} />
-          //     <div className='font-roboto mr-2'>
-          //       <p className='text-[18px] font-medium text-black mt-3 leading-6'>Video Title</p>
-          //       <p className='text-[16px] mt-1'>Tên người chủ</p>
-          //       <div className='flex text-[16px] justify-between'>
-          //         <p>Lượt xem</p>
-          //         <p>2 ngày trước</p>
-          //       </div>
-          //     </div>
-
-          //   </div>
-          // </div>
-            // <div>
-              <VideoComponent img={url} videoId={videoIds[index]} />
-
-            // </div>
-        ))}
+      {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
+          thumbnails.slice(0, 4).map((url, index) => (
+            <VideoComponent
+              key={videoIds[index]}
+              img={url}
+              title={values[index]?.metadata?.videoName}
+              username={values[index]?.metadata?.userName}
+              timestamp={values[index]?.metadata?.timestamp}
+              view={values[index]?.views}
+              videoId={videoIds[index]}
+            />
+          ))
+        ) : (
+          <Loading/>
+        )}
         <LuMoveRight className='absolute right-[-12px] border border-[#474747] top-[35%] rounded-[50%] cursor-pointer p-2 bg-[#f0f4f9] size-[50px]' />
       </div>
 

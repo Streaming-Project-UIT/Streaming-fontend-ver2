@@ -140,7 +140,7 @@ const Video = (props) => {
 
 
         <div className='w-1/3 flex flex-col'>
-          {videos.slice(4).map((url, index) => (
+          {videos.slice(0).map((url, index) => (
               <VideoComponentRight img={url} videoId={videoIds[index]} />
           ))}
           {/* <VideoComponentRight img={thumnail}/>   
