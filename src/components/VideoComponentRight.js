@@ -1,5 +1,24 @@
 import React from "react";
 import {  useNavigate } from 'react-router-dom';
+
+function formatTimestamp(timestamp) {
+    const now = new Date();
+    const diff = now.getTime() - timestamp.getTime();
+    
+    // Tính toán số phút, số giờ, số ngày
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    
+    // Định dạng lại thời gian
+    if (minutes < 60) {
+      return `${minutes} phút trước`;
+    } else if (hours < 24) {
+      return `${hours} giờ trước`;
+    } else {
+      return `${days} ngày trước`;
+    }
+  }
 const VideoComponentRight = (props) =>
 {
     const navigate = useNavigate()
@@ -11,18 +30,19 @@ const VideoComponentRight = (props) =>
         console.log(apiVideo)
         navigate(`/video?videoId=${result}`)
       };
-
+      const timestamp = new Date(props?.timestamp);
+      const formattedTime = formatTimestamp(timestamp);
     return(
         <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]' onClick={()=>handleClick(props?.videoId)}>
 
             
             <img className='w-1/2 rounded-[20px]' src={props?.img} alt='other'/>
-            <div className='font-roboto ml-[20px] mr-2  '>
-                <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                <p className='text-[16px]'>Tên người chủ</p>
-                <div className='flex justify-between text-[12px]'>
-                    <p>Lượt xem</p>
-                    <p>2 ngày trước</p>
+            <div className='font-roboto ml-[20px] w-full mr-2  '>
+                <p className='text-[19px] font-bold text-black'>{props?.title}</p>
+                <p className='text-[16px]'>{props?.username}</p>
+                <div className='flex justify-between text-[12px] mr-4'>
+                    <p>{props?.view} views</p>
+                    <p>{formattedTime}</p>
                 </div>
             </div>
         </div>

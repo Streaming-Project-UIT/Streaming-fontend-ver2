@@ -26,16 +26,18 @@ const UploadVideo = () => {
     };
 
     const handleSubmit = async (event) => {
-    event.preventDefault();
-    const userName = localStorage.getItem('userName');
-    try {
-        const formData = new FormData();
-        formData.append('videoName', videoName);
-        formData.append('description', description);
-        formData.append('file', file);
-        formData.append('userID', userToken);
-        formData.append('thumbnail', thumbnail);
-        formData.append('userName', userName);
+        event.preventDefault();
+            const firstName = localStorage.getItem('firstName');
+            const lastName = localStorage.getItem('lastName');
+            const fullName = firstName + ' ' + lastName;
+        try {
+            const formData = new FormData();
+            formData.append('videoName', videoName);
+            formData.append('description', description);
+            formData.append('file', file);
+            formData.append('userID', userToken);
+            formData.append('thumbnail', thumbnail);
+            formData.append('userName', fullName);
         const response = await fetch('http://localhost:8080/video/upload', {
             method: 'POST',
             body: formData,

@@ -9,36 +9,22 @@ import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
 import VideoComponentRight from '../components/VideoComponentRight';
-
+import Loading from '../components/Loading';
 
 const Video = (props) => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get('videoId');
-
+  const view = searchParams.get('v');
+  const [videoInfor, setVideoInfor] = useState()
 
   const [videoUrls, setVideoUrls] = useState([]);
   const [showVideo, setShowVideo] = useState(false);
   const [videoIds, setVideoIds] = useState([]);
-
+  const [formatTime, setFormatTime] = useState()
+  const [values, setValueIds] = useState();
   
-  useEffect(() => {
-    const fetchVideoIds = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/video/listIdThumbnail');
-        if (response.ok) {
-          const ids = await response.json();
-          setVideoIds(ids);
-        } else {
-          console.error('Failed to fetch video ids');
-        }
-      } catch (error) {
-        console.error('Failed to fetch video ids:', error);
-      }
-    };
 
-    fetchVideoIds();
-  }, []);
   // useEffect(() => {
   //   const fetchVideoIds = async () => {
   //     try {
@@ -75,12 +61,77 @@ const Video = (props) => {
       window.removeEventListener('resize', resizeVideo);
     };
   }, []);
+  useEffect(()=>{
+    const fetchInforVideo = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/video/getDetails/${videoId}`);
+        if (response.ok) {
+          const data = await response.json();
+          const mongoTimestamp = new Date(data.metadata.timestamp); // Timestamp của MongoDB
+          setFormatTime(formatMongoTimestamp(mongoTimestamp));
+          setVideoInfor(data)
+        } else {
+          console.error('Failed ');
+        }
+      } catch (error) {
+        console.error('Failed: ', error);
+      }
+    };
+
+    fetchInforVideo();
+  },[])
 
   const generateVideoUrls = () => {
     return videoIds.map((id) => `http://localhost:8080/video/get/${id}`);
   };
   const videos = generateVideoUrls();
+  function formatMongoTimestamp(timestamp) {
+    const date = new Date(timestamp);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+    const year = date.getFullYear();
+  
+    return `Ngày ${day}, ${month} năm ${year}`;
+  }
 
+
+
+
+
+  useEffect(() => {
+    const fetchVideoIds = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/video/listIdThumbnail');
+        if (!response.ok) {
+          throw new Error('Failed to fetch video ids');
+        }
+        const ids = await response.json();
+        setVideoIds(ids);
+        const fetchDataPromises = ids.map(async id => {
+          console.log(id)
+          const response = await fetch(`http://localhost:8080/video/getDetails/${id}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch data for id: ${id}`);
+          }
+          return response.json();
+        });
+        const data = await Promise.all(fetchDataPromises);
+        setValueIds(data);
+      } catch (error) {
+        console.error('Failed to fetch video ids or data:', error);
+      }
+    };
+  
+    fetchVideoIds();
+  }, []);
+const generateThumbnailUrls = () => {
+    return videoIds.map((id) => {
+    return  `http://localhost:8080/video/get/${id}`
+    });
+};
+
+
+const thumbnails =  generateThumbnailUrls();
   return (
     <div>
       <NavbarApp/>
@@ -97,7 +148,7 @@ const Video = (props) => {
                     type="video/mp4"/>
             </div>
             <p className='font-medium font-roboto my-[10px]  bg-white  text-[24px]'>
-                Sơn Tùng MTP | Chúng ta của tương lai
+                    {videoInfor?.metadata.videoName}  
                 </p>
             <hr></hr>
             <div className='font-roboto flex justify-between bg-white pb-[15px] px-[5px] pt-[10px]'>
@@ -105,7 +156,7 @@ const Video = (props) => {
                   <div className='flex items-center gap-4'>
                     <img alt='avar' src={avar} className='rounded-[50%] size-[50px]'/>
                     <div>
-                      <p className='text-[20px] '>Nguyễn Thành Đăng</p>
+                      <p className='text-[20px] '>{videoInfor?.metadata.userName}</p>
                       <p className='text-[#606060]'>Theo dõi: 4k</p>
                     </div>
                     <button className='flex  items-center ml-[15px] bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[15px]'>
@@ -127,12 +178,12 @@ const Video = (props) => {
             </div>
             <div className=' bg-white'>
                 <p className='font-medium rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
-                20 tỷ views | Ngày 20, 3 năm 2024
+                  {view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
+
                     <br/>
-                    <p className='leading-6 mt-[5px] font-normal'>Đây là website do nhóm bq2d làm. Môn SE330<br/> 212520683 - Nguyễn Thành Đăng
-                        <br/>21520714 - Trịnh Tấn Đạt 
-                        <br/>21520421 - Nguyễn Trần Bảo Quốc
-                        <br/>21520623 - Tạ Đức Bảo </p>
+                    <p className='leading-6 mt-[5px] font-normal'>
+                      {videoInfor?.metadata.description}
+                       </p>
                 </p>
             </div>
         </div>
@@ -140,9 +191,21 @@ const Video = (props) => {
 
 
         <div className='w-1/3 flex flex-col'>
-          {videos.slice(0).map((url, index) => (
-              <VideoComponentRight img={url} videoId={videoIds[index]} />
-          ))}
+          {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
+          videos.slice(0).map((url, index) => (
+                <VideoComponentRight
+                    key={videoIds[index]}
+                    img={url}
+                    title={values[index]?.metadata?.videoName}
+                    username={values[index]?.metadata?.userName}
+                    timestamp={values[index]?.metadata?.timestamp}
+                    view={values[index]?.views}
+                    videoId={videoIds[index]}
+                    />
+                ))
+                ) : (
+                <Loading/>
+                )}
           {/* <VideoComponentRight img={thumnail}/>   
           <VideoComponentRight img={thumnail}/>   
           <VideoComponentRight img={thumnail}/>   
@@ -151,13 +214,7 @@ const Video = (props) => {
         </div>
 
       </div>
-        {/* <div>
-        {generateVideoUrls().map((url, index) => (
-          <video key={index} controls>
-            <source src={url} type="video/mp4" />
-          </video>
-        ))}
-        </div> */}
+
     </div>
   );
 };

@@ -10,6 +10,8 @@ import Mainvideo from '../components/MainVideo';
 import VideoComponent from '../components/VideoComponent';
 import { IoMdClose } from "react-icons/io";
 import Comment from '../components/Comment/Comment';
+import Loading from '../components/Loading';
+
 
 const Profile = () => {
     const userToken = localStorage.getItem('userToken');
@@ -21,6 +23,8 @@ const Profile = () => {
     const [isMe, setIsMe] = useState(false);
     const [isFocusFilter, setFocused] = useState(false);
     const [isOpenComment, setIsOpenComment] = useState(false)
+    const [videoIds, setVideoIds] = useState([]);
+    const [values, setValueIds] = useState();
 
     const handleChooseFilter = () =>
     {
@@ -59,6 +63,41 @@ const Profile = () => {
         fetchProfile();
     }, []);
     
+    useEffect(() => {
+        const fetchVideoIds = async () => {
+          try {
+            const response = await fetch('http://localhost:8080/video/listIdThumbnail');
+            if (!response.ok) {
+              throw new Error('Failed to fetch video ids');
+            }
+            const ids = await response.json();
+            setVideoIds(ids);
+            const fetchDataPromises = ids.map(async id => {
+              console.log(id)
+              const response = await fetch(`http://localhost:8080/video/getDetails/${id}`);
+              if (!response.ok) {
+                throw new Error(`Failed to fetch data for id: ${id}`);
+              }
+              return response.json();
+            });
+            const data = await Promise.all(fetchDataPromises);
+            setValueIds(data);
+          } catch (error) {
+            console.error('Failed to fetch video ids or data:', error);
+          }
+        };
+      
+        fetchVideoIds();
+      }, []);
+    const generateThumbnailUrls = () => {
+        return videoIds.map((id) => {
+        return  `http://localhost:8080/video/get/${id}`
+        });
+    };
+    
+
+    const thumbnails =  generateThumbnailUrls();
+
 
     const fn = 'Nguyễn Thành'
     const ln = 'Đăng'
@@ -114,7 +153,9 @@ const Profile = () => {
                     isOpenComment?
                     <div className='w-[500px] h-auto shadow-xl bg-white'>
                         <IoMdClose className='px-2 py-2 w-[45px] h-[45px] fill-[#555555] float-end cursor-pointer rounded-[20px] mx-1 my-1 hover:bg-[#e7e7e7]' onClick={handleCloseComment}/>
-                        <div className='w-full px-10 mt-[50px]'>
+                        <p className="text-[24px] font-bold ml-5 mt-2 select-none">Bình luận</p>
+                        <div className='w-full px-4 mt-[20px]'>
+                            
                             <Comment/>
                         </div>
                     </div>:<div></div>
@@ -127,12 +168,22 @@ const Profile = () => {
                 <IoMdMenu className='cursor-pointer size-[25px]' />
             </div>
             <div className='flex flex-wrap mx-[90px] font-normal font-Oswald text-[#717171]'>
-                <VideoComponent/>
-                <VideoComponent/>
-                <VideoComponent/>
-                <VideoComponent/>
-                <VideoComponent/>
-                <VideoComponent/>
+            {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
+          thumbnails.slice(0).map((url, index) => (
+                <VideoComponent
+                    key={videoIds[index]}
+                    img={url}
+                    title={values[index]?.metadata?.videoName}
+                    username={values[index]?.metadata?.userName}
+                    timestamp={values[index]?.metadata?.timestamp}
+                    view={values[index]?.views}
+                    videoId={videoIds[index]}
+                    />
+                ))
+                ) : (
+                <Loading/>
+                )}
+
 
             </div>
         </div>

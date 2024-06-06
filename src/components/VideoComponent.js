@@ -26,9 +26,13 @@ const VideoComponent = (props) =>
         const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + videoId;
         const response = await fetch(apiUrl);
         const result = await response.text();
+        await fetch(`http://localhost:8080/video/updateViews/${videoId}`, {method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },})
         const apiVideo = "http://localhost:8080/video/get/" + result;
         console.log(apiVideo)
-        navigate(`/video?videoId=${result}`)
+        navigate(`/video?videoId=${result}&v=${props?.view}`)
       };
       const timestamp = new Date(props?.timestamp);
       const formattedTime = formatTimestamp(timestamp);
@@ -39,7 +43,7 @@ const VideoComponent = (props) =>
                         <div className='font-roboto  mr-2  '>
                             <p className='text-[18px] font-medium text-black mt-3 leading-6'>{props?.title}</p>
                             <p className='text-[16px] mt-1'>{props?.username}</p>
-                            <div className='flex  text-[16px] justify-between'>
+                            <div className='flex text-[16px] justify-between'>
                                 <p>{props?.view} views</p>
                                 <p>{formattedTime}</p>
                             </div>
