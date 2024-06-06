@@ -40,7 +40,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
             console.log("user token: ", data.id);   
             console.log(data)
             const userToken = data.id;
-            localStorage.setItem('userId', data.username)
+            localStorage.setItem('userName', data.username)
             localStorage.setItem('userToken', userToken);
             localStorage.setItem('firstName', data.firstName);
             localStorage.setItem('lastName', data.lastName);
