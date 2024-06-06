@@ -4,7 +4,7 @@ import NavbarApp from '../components/NavbarApp'
 
 const UploadVideo = () => {
     const [file, setFile] = useState(null);
-    const [title, setTitle] = useState('');
+    const [videoName, setVideoName] = useState('');
     const [description, setDescription] = useState('');
     const userToken = localStorage.getItem('userToken');
     const [thumbnail, setThumbnail] = useState(null);
@@ -18,7 +18,7 @@ const UploadVideo = () => {
     }
 
     const handleTitleChange = (event) => {
-        setTitle(event.target.value);
+        setVideoName(event.target.value);
     };
 
     const handleDescriptionChange = (event) => {
@@ -27,14 +27,15 @@ const UploadVideo = () => {
 
     const handleSubmit = async (event) => {
     event.preventDefault();
-
+    const userName = localStorage.getItem('userName');
     try {
         const formData = new FormData();
-        formData.append('title', title);
+        formData.append('videoName', videoName);
         formData.append('description', description);
         formData.append('file', file);
         formData.append('userID', userToken);
         formData.append('thumbnail', thumbnail);
+        formData.append('userName', userName);
         const response = await fetch('http://localhost:8080/video/upload', {
             method: 'POST',
             body: formData,
@@ -72,8 +73,8 @@ const UploadVideo = () => {
                             className="border  w-full rounded-[10px] border-gray-300 p-2" />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="title" className="block">Tiêu đề:</label>
-                            <input type="text" id="title" value={title} onChange={handleTitleChange} 
+                            <label htmlFor="videoName" className="block">Tiêu đề:</label>
+                            <input type="text" id="videoName" value={videoName} onChange={handleTitleChange} 
                             className="border  w-full rounded-[10px] border-gray-300 p-2" />
                         </div>
                         <div className="mb-4">
