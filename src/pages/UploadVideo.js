@@ -30,8 +30,8 @@ const UploadVideo = () => {
 
     try {
         const formData = new FormData();
-        // formData.append('title', title);
-        // formData.append('description', description);
+        formData.append('title', title);
+        formData.append('description', description);
         formData.append('file', file);
         formData.append('userID', userToken);
         formData.append('thumbnail', thumbnail);

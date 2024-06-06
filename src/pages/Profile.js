@@ -113,7 +113,7 @@ const Profile = () => {
                 {
                     isOpenComment?
                     <div className='w-[500px] h-auto shadow-xl bg-white'>
-                        <IoMdClose className='px-2 py-2 w-[45px] h-[45px] fill-black-500 float-end cursor-pointer' onClick={handleCloseComment}/>
+                        <IoMdClose className='px-2 py-2 w-[45px] h-[45px] fill-[#555555] float-end cursor-pointer rounded-[20px] mx-1 my-1 hover:bg-[#e7e7e7]' onClick={handleCloseComment}/>
                     </div>:<div></div>
                 }
             </div>

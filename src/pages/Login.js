@@ -38,8 +38,13 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
             const data = await response.json();
             console.log("user id: ", data.username);
             console.log("user token: ", data.id);   
+            console.log(data)
             const userToken = data.id;
+            localStorage.setItem('userId', data.username)
             localStorage.setItem('userToken', userToken);
+            localStorage.setItem('firstName', data.firstName);
+            localStorage.setItem('lastName', data.lastName);
+
             navigate('/');
         } else {
             const data = await response.json();

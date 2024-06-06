@@ -18,15 +18,16 @@ const NavbarApp = () => {
     let fullName = ''; // Khai báo biến fullName
     const [searchValue, setSearchValue] = useState('');
     const [isLogin, setIsLogin] = useState(true)
+    const userToken = localStorage.getItem('userToken')
     const navigate = useNavigate();
 
     const handleFindChange = (event) => {
         setSearchValue(event.target.value);
     };
-    useEffect(() => {
-        fullName = firstName + " " + lastName;
-    }, [firstName, lastName]);
-    const vidufullName = "Nguyễn Thành Đăng"
+    // useEffect(() => {
+    //     fullName = firstName + " " + lastName;
+    // }, [firstName, lastName]);
+    const vidufullName = localStorage.getItem('firstName')+ ' '+ localStorage.getItem('lastName')
     const [clickAvatar, setClickAvatar] = useState(false);
     const handleClickProfile = (e) =>
     {
@@ -54,10 +55,17 @@ const NavbarApp = () => {
         }
     });
 
+    const handleUpload = () =>
+    {
+        navigate('/upload')
+    };
+
     return (
         <div className='z-50 fixed select-none mb-[2px] drop-shadow-lg bg-white p-0 flex items-center w-full ml-0'>
             <img src={logo} className='cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo'/>
-            <p className='cursor-pointer text-[30px] text-[#595959] font-bold font-teko ml-[20px] -mx-1 -my-1'>Video Sharing</p>
+            <p className='cursor-pointer text-[30px] text-[#595959] font-bold font-teko ml-[20px] -mx-1 -my-1'
+                onClick={() => {navigate('/')}}
+                >Video Sharing</p>
             <input 
                 id='searchValue'
                 value={searchValue}  
@@ -68,7 +76,7 @@ const NavbarApp = () => {
                 border-[1px] border-[#ccc] outline-none'
             />
             <div className='flex-none'>
-                { isLogin?<div className=' flex items-center'>
+                { !userToken?<div className=' flex items-center'>
                         <button
                             className="items-center flex mr-[15px] ml-[200px] text-[15px] hover:shadow-md hover:bg-[#dedede]  bg-white
                             text-[#0b57d0] font-bold py-[10px] px-4 my-1 rounded-[30px] focus:outline-none focus:shadow-outline "
@@ -86,21 +94,22 @@ const NavbarApp = () => {
                     </div>:
                     <div className='flex items-center'>
                         <button
-                            className="items-center flex mr-[15px] ml-[200px] text-[15px] hover:shadow-md hover:bg-[#0b57a9] rounded-[20px] bg-[#0b57d0]
+                            className="items-center flex mr-[15px] ml-[200px] text-[15px] hover:shadow-md hover:bg-[#0b57a9] bg-[#0b57d0]
                             text-white font-medium py-[10px] px-4 my-1 rounded-[30px] focus:outline-none focus:shadow-outline "
-                            type="button">
+                            type="button"
+                            onClick={handleUpload}>
                             Tải lên
                             <FiUpload className='ml-[5px]'/>
                         </button>
                         <IoIosNotificationsOutline className='hover:bg-[#edebeb] rounded-[20px] size-[27px] cursor-pointer  ml-[15px]'/>
                         <div className='relative '>
-                            <img  className= 'hover:shadow-md cursor-pointer w-[45px] h-[45px] mr-[30px] rounded-[50%] my-1 mx-[15px]  rounded focus:outline-none focus:shadow-outline'
+                            <img  className= 'hover:shadow-md cursor-pointer w-[45px] h-[45px] mr-[30px] my-1 mx-[15px]  rounded-[50%] focus:outline-none focus:shadow-outline'
                                 src={avar}
                                 onClick={handleClickProfile} alt='avatar'/>
                             <div ref={menuRef}  className={` rounded-[10px] right-[20px] max-w-[400px]  min-w-[250px] top-[65px] w-auto h-auto absolute 
                                 ${!clickAvatar?'hidden':' border-[1px] mt-0 bg-white '}`}>
                                 <IoTriangle className=' text-white p-0 m-0  right-[17px] top-[-32px] size-[30px] mt-[15px]'/>
-                                <ul className=' cursor-pointer  mt-[15px] text-[#545454]'>
+                                <ul className=' cursor-pointer  mt-[-20px] text-[#545454]'>
                                     <li className='flex items-center'>
                                         <img className='ml-[15px] h-[60px] rounded-[50%]' src={avar} alt='avatar'></img>
                                         <p className='mx-[15px] font-bold pr-[15px] text-[18px]'>{vidufullName}</p>
@@ -110,7 +119,8 @@ const NavbarApp = () => {
                                     </div>
                                     <div className='hover:text-black flex cursor-pointer items-center my-[10px]'>
                                             <MdAccountCircle className=' size-[30px] mx-[15px]'/>
-                                            <li className=' font-medium hover:font-bold w-[150px] '> Hồ sơ 
+                                            <li className=' font-medium hover:font-bold w-[150px] '
+                                                onClick={()=>{navigate('/profile')}}> Hồ sơ 
                                             </li>
                                             <FaAngleRight className=' ml-auto mr-[15px]' />
                                     </div>
@@ -122,7 +132,34 @@ const NavbarApp = () => {
                                     </div>
                                     <div className='hover:text-black flex cursor-pointer items-center my-[10px] mb-[20px]'>
                                             <IoLogOutSharp className=' size-[30px] mx-[15px]'/>
-                                            <li className=' font-medium hover:font-bold w-[150px]  '> Đăng xuất
+                                            <li className=' font-medium hover:font-bold w-[150px]  '
+                                        
+                                                    onClick={() => {
+                                                        // fetch('http://localhost:8080/logout', {
+                                                        //     method: 'POST',
+                                                        //     credentials: 'include'
+                                                        // })
+                                                        //     .then(response => {
+                                                        //         if (response.ok) {
+                                                        //             navigate('/login');
+                                                        //         } else {
+                                                        //             throw new Error('Logout failed');
+                                                        //         }
+                                                        //     })
+                                                        //     .catch(error => {
+                                                        //         console.error(error);
+                                                        // });
+                                                        // navigate('/login');
+
+                                                        localStorage.removeItem('userToken');
+                                                        localStorage.removeItem('firstName');
+                                                        localStorage.removeItem('lastName');
+                                                        navigate('/login');
+                                                    }}
+                                    
+                                        
+                                        
+                                            > Đăng xuất
                                             </li>
                                             <FaAngleRight className='ml-auto mr-[15px]' />
                                     </div>
@@ -133,7 +170,6 @@ const NavbarApp = () => {
                     </div>
                 }
             </div>
-
 
         </div>
     );

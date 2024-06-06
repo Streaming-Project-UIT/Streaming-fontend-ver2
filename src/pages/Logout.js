@@ -17,8 +17,8 @@ const Logout = () => {
             })
             .catch(error => {
                 console.error(error);
-            });
-        // navigate('/login');
+         });
+        navigate('/login');
     };
 
     return (

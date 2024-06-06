@@ -7,20 +7,28 @@ import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
 import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
+import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
+import VideoComponentRight from '../components/VideoComponentRight';
 
-const Video = () => {
+
+const Video = (props) => {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams();
+  const videoId = searchParams.get('videoId');
+
+
   const [videoUrls, setVideoUrls] = useState([]);
   const [showVideo, setShowVideo] = useState(false);
   const [videoIds, setVideoIds] = useState([]);
 
+  
   useEffect(() => {
     const fetchVideoIds = async () => {
       try {
-        const response = await fetch('http://localhost:8080/video/getAllIds');
+        const response = await fetch('http://localhost:8080/video/listIdThumbnail');
         if (response.ok) {
           const ids = await response.json();
           setVideoIds(ids);
-          // console.log(videoIds);
         } else {
           console.error('Failed to fetch video ids');
         }
@@ -31,6 +39,24 @@ const Video = () => {
 
     fetchVideoIds();
   }, []);
+  // useEffect(() => {
+  //   const fetchVideoIds = async () => {
+  //     try {
+  //       const response = await fetch('http://localhost:8080/video/getAllIds');
+  //       if (response.ok) {
+  //         const ids = await response.json();
+  //         setVideoIds(ids);
+  //         // console.log(videoIds);
+  //       } else {
+  //         console.error('Failed to fetch video ids');
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch video ids:', error);
+  //     }
+  //   };
+
+  //   fetchVideoIds();
+  // }, []);
   const videoRef = useRef(null);
   const [videoHeight, setVideoHeight] = useState('auto');
 
@@ -53,6 +79,7 @@ const Video = () => {
   const generateVideoUrls = () => {
     return videoIds.map((id) => `http://localhost:8080/video/get/${id}`);
   };
+  const videos = generateVideoUrls();
 
   return (
     <div>
@@ -61,7 +88,7 @@ const Video = () => {
       <div className='px-[60px] py-[20px] flex'>
         <div className='w-8/12'>
             <div className=' h-auto bg-black'>
-                <video src ={st} controls  
+                <video src ={`http://localhost:8080/video/get/${videoId}`} controls  
                     autoPlay
                     muted
                     loop
@@ -113,51 +140,15 @@ const Video = () => {
 
 
         <div className='w-1/3 flex flex-col'>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-            <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                <img className='w-1/2 rounded-[20px]' src={thumnail} alt='other'/>
-                <div className='font-roboto ml-[20px] mr-2  '>
-                    <p className='text-[16px] font-medium text-black'>Sơn Tùng MTP | Chúng ta của tương lai</p>
-                    <p className='text-[16px]'>Tên người chủ</p>
-                    <div className='flex justify-between text-[12px]'>
-                        <p>Lượt xem</p>
-                        <p>2 ngày trước</p>
-                    </div>
-                </div>
-            </div>
-          </div>
+          {videos.slice(4).map((url, index) => (
+              <VideoComponentRight img={url} videoId={videoIds[index]} />
+          ))}
+          {/* <VideoComponentRight img={thumnail}/>   
+          <VideoComponentRight img={thumnail}/>   
+          <VideoComponentRight img={thumnail}/>   
+          <VideoComponentRight img={thumnail}/>   
+          <VideoComponentRight img={thumnail}/>    */}
+        </div>
 
       </div>
         {/* <div>
