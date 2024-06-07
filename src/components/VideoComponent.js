@@ -32,7 +32,7 @@ const VideoComponent = (props) =>
             },})
         const apiVideo = "http://localhost:8080/video/get/" + result;
         console.log(apiVideo)
-        navigate(`/video?videoId=${result}&v=${props?.view}`)
+        navigate(`/video?videoId=${result}&v=${props?.view}&id=${props?.userid}`)
       };
       const timestamp = new Date(props?.timestamp);
       const formattedTime = formatTimestamp(timestamp);

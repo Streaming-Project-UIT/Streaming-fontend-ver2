@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import logo from '../assets/images/logo.png'
+import logoApp from '../assets/images/logoApp.png'
 import avar from '../assets/images/avar.jpg'
 import { FiUpload } from "react-icons/fi";
 import { IoIosNotificationsOutline } from "react-icons/io";
@@ -62,7 +62,7 @@ const NavbarApp = () => {
 
     return (
         <div className='z-50 fixed select-none mb-[2px] drop-shadow-lg bg-white p-0 flex items-center w-full ml-0'>
-            <img src={logo} className='cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo'/>
+            <img src={logoApp} className='cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo'/>
             <p className='cursor-pointer text-[30px] text-[#595959] font-bold font-teko ml-[20px] -mx-1 -my-1'
                 onClick={() => {navigate('/')}}
                 >Video Sharing</p>

@@ -2,9 +2,9 @@ import React, {useEffect,useState, useRef} from "react";
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
+import axios from "axios";
 
-
-const Mainvideo = ({ onClick, isActive }) =>
+const Mainvideo = (props) =>
 {
     const videoRef = useRef(null);
     const [videoHeight, setVideoHeight] = useState('auto');
@@ -24,6 +24,20 @@ const Mainvideo = ({ onClick, isActive }) =>
         window.removeEventListener('resize', resizeVideo);
       };
     }, []);
+    useEffect(()=>
+    {
+        
+    },[])
+    function formatMongoTimestamp(timestamp) {
+        const date = new Date(timestamp);
+        const day = date.getDate();
+        const month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0
+        const year = date.getFullYear();
+      
+        return `Ngày ${day}, ${month} năm ${year}`;
+      }
+
+
     return(
         <div className=''>
             <div className='flex justify-center'>
@@ -41,7 +55,7 @@ const Mainvideo = ({ onClick, isActive }) =>
             {/* <div className='flex justify-center w-full'> */}
             <div>
                 <p className='font-medium font-roboto  bg-white pl-[20px] text-[24px]'>
-                    Sơn Tùng MTP | Chúng ta của tương lai
+                    {props?.title}
                     </p>
 
                 <hr></hr>
@@ -49,7 +63,7 @@ const Mainvideo = ({ onClick, isActive }) =>
             <div>
                 <div className='font-roboto flex justify-between bg-white pb-[20px] px-[25px] pt-[10px]'>
                     <button className='text-[#3e3e3e] hover:decoration-1 hover:underline'
-                        onClick={onClick}>
+                        onClick={props?.onClick}>
                         Xem bình luận</button>
                     <div className='flex '>
                         <button className='items-center  flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
@@ -64,14 +78,12 @@ const Mainvideo = ({ onClick, isActive }) =>
                 </div>
             </div>
             <div>
-                <div className={`bg-white py-3 ] shadow-xl ${isActive?'rounded-b-[10px':'rounded-bl-[10px'}`} >
+                <div className={`bg-white py-3 ] shadow-xl ${props?.isActive?'rounded-b-[10px':'rounded-bl-[10px'}`} >
                     <p className='font-medium mx-[20px] rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
-                    20 tỷ views | Ngày 20, 3 năm 2024
+                     {props?.view} lượt xem | {formatMongoTimestamp(props?.timestamp)}
                         <br/>
-                        <p className='leading-6 mt-[5px] font-normal '>Đây là website do nhóm bq2d làm. Môn SE330<br/> 212520683 - Nguyễn Thành Đăng
-                            <br/>21520714 - Trịnh Tấn Đạt 
-                            <br/>21520421 - Nguyễn Trần Bảo Quốc
-                            <br/>21520623 - Tạ Đức Bảo </p>
+                        <p className='leading-6 mt-[5px] font-normal '>
+                        {props?.descript} </p>
                     </p>
                 </div>
             </div>

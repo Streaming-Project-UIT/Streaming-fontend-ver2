@@ -148,7 +148,18 @@ const Profile = () => {
                 </button>
             </div>
             <div className='flex mx-[160px]'>
-                <Mainvideo onClick={handleOpenComment} isActive={isOpenComment}/>
+                {
+                    (values && values.length > 0 && thumbnails && thumbnails.length > 0)?
+                    <Mainvideo onClick={handleOpenComment} isActive={isOpenComment}
+                                            title={values[0]?.metadata?.videoName}
+                                            username={values[0]?.metadata?.userName}
+                                            timestamp={values[0]?.metadata?.timestamp}
+                                            view={values[0]?.views}
+                                            descript={values[0]?.metadata.description}
+                                            userid={values[0]?.metadata.userID}
+                                            videoId={videoIds[0]}
+                    />:<div></div>
+                }
                 {
                     isOpenComment?
                     <div className='w-[500px] h-auto shadow-xl bg-white'>
@@ -177,6 +188,7 @@ const Profile = () => {
                     username={values[index]?.metadata?.userName}
                     timestamp={values[index]?.metadata?.timestamp}
                     view={values[index]?.views}
+                    userid={values[index]?.metadata.userID}
                     videoId={videoIds[index]}
                     />
                 ))

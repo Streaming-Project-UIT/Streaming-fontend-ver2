@@ -110,6 +110,7 @@ const Home = () => {
               timestamp={values[index]?.metadata?.timestamp}
               view={values[index]?.views}
               videoId={videoIds[index]}
+              userid={values[index]?.metadata.userID}
             />
           ))
         ) : (

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import NavbarApp from '../components/NavbarApp'
 import thumnail from '../assets/images/thumnail.png'
 import { IoIosCloudUpload } from "react-icons/io";  
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineLike, AiOutlineDislike  } from "react-icons/ai";
 import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
 import avar from '../assets/images/avar.jpg'
@@ -10,12 +10,17 @@ import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
 import VideoComponentRight from '../components/VideoComponentRight';
 import Loading from '../components/Loading';
+import Comment from '../components/Comment/Comment'
+import axios from 'axios';
+
 
 const Video = (props) => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams();
   const videoId = searchParams.get('videoId');
   const view = searchParams.get('v');
+  const usId = searchParams.get('id')
+  const myId = localStorage.getItem('userName')
   const [videoInfor, setVideoInfor] = useState()
 
   const [videoUrls, setVideoUrls] = useState([]);
@@ -23,8 +28,10 @@ const Video = (props) => {
   const [videoIds, setVideoIds] = useState([]);
   const [formatTime, setFormatTime] = useState()
   const [values, setValueIds] = useState();
-  
-
+  const [numLike, setNumLike] = useState(0)
+  const [isLike, setIsLike] = useState(false)
+  const [isSub, setIsSub] = useState(false)
+  const [numSub, setNumSub] = useState(0)
   // useEffect(() => {
   //   const fetchVideoIds = async () => {
   //     try {
@@ -94,8 +101,96 @@ const Video = (props) => {
     return `Ngày ${day}, ${month} năm ${year}`;
   }
 
+  useEffect(()=>{
+    const getLike= async() =>
+    {
+      try {
+        const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${videoId}`);
+        setNumLike(data.data)
+        
+        const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${usId}&likedToId=${videoId}`);
+        console.log('ok',dataIsLike.data)
+        setIsLike(dataIsLike.data)
+
+      } catch (error) {
+        
+      }
+    }
+    const getSubscribe = async () =>
+    {
+      try {
+          // const data = await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${usId}&subscribedToId=${myId}`)
+          const numOfSubs= await axios.get(`http://localhost:8080/video/getSubscriberCount?userId=${usId}`)
+          setNumSub(numOfSubs.data)
+          const dataIsSub = await axios.get(`http://localhost:8080/video/isSubscribed?subscriberId=${myId}&subscribedToId=${usId}`)
+          setIsSub(dataIsSub.data)
+
+      } catch (error) {
+        
+      }
+    }
 
 
+    getLike()
+    getSubscribe()
+  },[])
+  const actLikeVideo = async(act) =>{
+    try {
+      const body = {
+        likerToId: usId,
+        likedToId: videoId
+      }
+      if (!act)
+      {
+        await axios.post(`http://localhost:8080/video/like?likerToId=${usId}&likedToId=${videoId}`, body)
+      }
+      else{
+        await axios.post(`http://localhost:8080/video/unlike?likerToId=${usId}&likedToId=${videoId}`, body)
+      }
+    } catch (error) {
+      
+    }
+  }
+  const actSubVideo = async(act) =>{
+    try {
+      if (!act)
+      {
+        await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${myId}&subscribedToId=${usId}`)
+      }
+      else{
+        await axios.post(`http://localhost:8080/video/unsubscribe?subscriberId=${myId}&subscribedToId=${usId}`)
+      }
+    } catch (error) {
+      
+    }
+  }
+  const handleLike= () =>{
+    if (!isLike)
+    {
+      setNumLike(numLike+1)
+      setIsLike(!isLike)
+      }
+    else 
+    {
+      setNumLike(numLike-1)
+      console.log('nu1m', numLike-1)
+      setIsLike(!isLike)
+    }
+    actLikeVideo(isLike)
+  }
+  const handleSub= () =>{
+    if (!isSub)
+    {
+      setNumSub(numSub+1)
+      setIsSub(!isSub)
+      }
+    else 
+    {
+      setNumSub(numSub-1)
+      setIsSub(!isSub)
+    }
+    actSubVideo(isSub)
+  }
 
 
   useEffect(() => {
@@ -108,7 +203,7 @@ const Video = (props) => {
         const ids = await response.json();
         setVideoIds(ids);
         const fetchDataPromises = ids.map(async id => {
-          console.log(id)
+          // console.log(id)
           const response = await fetch(`http://localhost:8080/video/getDetails/${id}`);
           if (!response.ok) {
             throw new Error(`Failed to fetch data for id: ${id}`);
@@ -124,6 +219,7 @@ const Video = (props) => {
   
     fetchVideoIds();
   }, []);
+  
 const generateThumbnailUrls = () => {
     return videoIds.map((id) => {
     return  `http://localhost:8080/video/get/${id}`
@@ -157,18 +253,24 @@ const thumbnails =  generateThumbnailUrls();
                     <img alt='avar' src={avar} className='rounded-[50%] size-[50px]'/>
                     <div>
                       <p className='text-[20px] '>{videoInfor?.metadata.userName}</p>
-                      <p className='text-[#606060]'>Theo dõi: 4k</p>
+                      <p className='text-[#606060]'>Theo dõi: {numSub}</p>
                     </div>
-                    <button className='flex  items-center ml-[15px] bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[15px]'>
-                                        Theo dõi                                    
-                                    <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/>
-                                    </button>
+                    <button className={`flex items-center ml-[15px]  px-[15px] py-[8px] rounded-[15px] ${isSub?'bg-[#dadada] hover:bg-[#bfbfbf] text-black':'bg-[#d00b29] hover:bg-[#933240] text-white'}`}
+                          onClick={handleSub}>
+                          {isSub ? 'Hủy theo dõi' : 
+                          <div className='flex'>Theo dõi <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/></div>}
+                    </button>
                   </div>
                 </div>
                 <div className='flex '>
-                    <button className='items-center h-[50px]  flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
-                        Thích
-                        <AiOutlineLike className='size-[30px] ml-[5px]'/>
+                    <button className='items-center h-[50px]  flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'
+                      onClick={handleLike}>
+                        {numLike}
+                        {!isLike?
+                          <AiOutlineLike className='size-[30px] ml-[5px]'/>:
+                          <AiFillLike className='size-[30px] ml-[5px]'/>
+                 
+                        }
                     </button>
                     <button className='items-center h-[50px] ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
                         Chia sẻ
@@ -186,6 +288,10 @@ const thumbnails =  generateThumbnailUrls();
                        </p>
                 </p>
             </div>
+            <div className='my-[40px]'>
+
+              <Comment/>
+            </div>
         </div>
 
 
@@ -201,6 +307,7 @@ const thumbnails =  generateThumbnailUrls();
                     timestamp={values[index]?.metadata?.timestamp}
                     view={values[index]?.views}
                     videoId={videoIds[index]}
+                    userid={values[index]?.metadata.userID}
                     />
                 ))
                 ) : (
