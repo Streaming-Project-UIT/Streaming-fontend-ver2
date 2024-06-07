@@ -151,19 +151,6 @@ const Video = (props) => {
       
     }
   }
-  const actSubVideo = async(act) =>{
-    try {
-      if (!act)
-      {
-        await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${myId}&subscribedToId=${usId}`)
-      }
-      else{
-        await axios.post(`http://localhost:8080/video/unsubscribe?subscriberId=${myId}&subscribedToId=${usId}`)
-      }
-    } catch (error) {
-      
-    }
-  }
   const handleLike= () =>{
     if (!isLike)
     {
@@ -177,6 +164,19 @@ const Video = (props) => {
       setIsLike(!isLike)
     }
     actLikeVideo(isLike)
+  }
+  const actSubVideo = async(act) =>{
+    try {
+      if (!act)
+      {
+        await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${myId}&subscribedToId=${usId}`)
+      }
+      else{
+        await axios.post(`http://localhost:8080/video/unsubscribe?subscriberId=${myId}&subscribedToId=${usId}`)
+      }
+    } catch (error) {
+      
+    }
   }
   const handleSub= () =>{
     if (!isSub)

@@ -6,9 +6,72 @@ import axios from "axios";
 
 const Mainvideo = (props) =>
 {
+    const myId = localStorage.getItem('userName')
+
     const videoRef = useRef(null);
     const [videoHeight, setVideoHeight] = useState('auto');
-  
+    const [values, setValueIds] = useState();
+    const [numLike, setNumLike] = useState(0)
+    const [isLike, setIsLike] = useState(false)
+    const [displayVideo, setDisplayVideo] = useState()
+
+    useEffect(()=>{
+        const getLike= async() =>
+            {
+              try {
+                const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${displayVideo}`);
+                setNumLike(data.data)
+                
+                const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${displayVideo}`);
+                setIsLike(dataIsLike.data)
+        
+              } catch (error) {
+                
+              }
+            }
+        getLike()
+    },[])
+    const handleGetVideoId = async ( videoId) => {
+        const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + videoId;
+        const response = await fetch(apiUrl);
+        const result = await response.text();
+        await fetch(`http://localhost:8080/video/updateViews/${videoId}`, {method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json'
+            },})
+        setDisplayVideo(result)
+      };
+    const actLikeVideo = async(act) =>{
+        try {
+          const body = {
+            likerToId: myId,
+            likedToId: myId
+          }
+          if (!act)
+          {
+            await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${displayVideo}`, body)
+          }
+          else{
+            await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${displayVideo}`, body)
+          }
+        } catch (error) {
+          
+        }
+      }
+    const handleLike= () =>{
+        if (!isLike)
+        {
+            setNumLike(numLike+1)
+            setIsLike(!isLike)
+            }
+        else 
+        {
+            setNumLike(numLike-1)
+            setIsLike(!isLike)
+        }
+        actLikeVideo(isLike)
+    }
+      
     useEffect(() => {
       const video = videoRef.current;
       const resizeVideo = () => {
@@ -26,7 +89,7 @@ const Mainvideo = (props) =>
     }, []);
     useEffect(()=>
     {
-        
+        handleGetVideoId(props?.videoId)
     },[])
     function formatMongoTimestamp(timestamp) {
         const date = new Date(timestamp);
@@ -66,9 +129,10 @@ const Mainvideo = (props) =>
                         onClick={props?.onClick}>
                         Xem bình luận</button>
                     <div className='flex '>
-                        <button className='items-center  flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
-                            Thích
-                            <AiOutlineLike className='size-[30px] ml-[5px]'/>
+                        <button className='items-center select-none disabled flex py-[8px] px-[20px] rounded-[20px]  bg-[#f3f3f3]'
+                           >
+                            {numLike} lượt thích
+                            {/* <AiOutlineLike className='size-[30px] ml-[5px]'/> */}
                         </button>
                         <button className='items-center ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
                             Chia sẻ
