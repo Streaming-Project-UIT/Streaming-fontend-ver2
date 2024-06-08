@@ -20,7 +20,7 @@ const Video = (props) => {
   const videoId = searchParams.get('videoId');
   const view = searchParams.get('v');
   const usId = searchParams.get('id')
-  const myId = localStorage.getItem('userName')
+  const myId = localStorage.getItem('userToken')
   const [videoInfor, setVideoInfor] = useState()
 
   const [videoUrls, setVideoUrls] = useState([]);
@@ -108,7 +108,7 @@ const Video = (props) => {
         const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${videoId}`);
         setNumLike(data.data)
         
-        const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${usId}&likedToId=${videoId}`);
+        const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${videoId}`);
         console.log('ok',dataIsLike.data)
         setIsLike(dataIsLike.data)
 
@@ -142,10 +142,10 @@ const Video = (props) => {
       }
       if (!act)
       {
-        await axios.post(`http://localhost:8080/video/like?likerToId=${usId}&likedToId=${videoId}`, body)
+        await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${videoId}`, body)
       }
       else{
-        await axios.post(`http://localhost:8080/video/unlike?likerToId=${usId}&likedToId=${videoId}`, body)
+        await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${videoId}`, body)
       }
     } catch (error) {
       
@@ -225,7 +225,10 @@ const generateThumbnailUrls = () => {
     return  `http://localhost:8080/video/get/${id}`
     });
 };
-
+const handleClickChannel = () =>
+{
+  navigate(`/profile?userId=${usId}`)
+}
 
 const thumbnails =  generateThumbnailUrls();
   return (
@@ -250,16 +253,21 @@ const thumbnails =  generateThumbnailUrls();
             <div className='font-roboto flex justify-between bg-white pb-[15px] px-[5px] pt-[10px]'>
                 <div>
                   <div className='flex items-center gap-4'>
-                    <img alt='avar' src={avar} className='rounded-[50%] size-[50px]'/>
+                    <img alt='avar' src={avar} className='rounded-[50%] size-[50px] cursor-pointer' onClick={handleClickChannel}/>
                     <div>
-                      <p className='text-[20px] '>{videoInfor?.metadata.userName}</p>
+                      <p className='text-[20px] cursor-pointer' onClick={handleClickChannel}>{videoInfor?.metadata.userName}</p>
                       <p className='text-[#606060]'>Theo dõi: {numSub}</p>
                     </div>
-                    <button className={`flex items-center ml-[15px]  px-[15px] py-[8px] rounded-[15px] ${isSub?'bg-[#dadada] hover:bg-[#bfbfbf] text-black':'bg-[#d00b29] hover:bg-[#933240] text-white'}`}
-                          onClick={handleSub}>
-                          {isSub ? 'Hủy theo dõi' : 
-                          <div className='flex'>Theo dõi <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/></div>}
-                    </button>
+                    {
+                      usId!==myId?
+                      <button className={`flex items-center ml-[15px]  px-[15px] py-[8px] rounded-[15px] ${isSub?'bg-[#dadada] hover:bg-[#bfbfbf] text-black':'bg-[#d00b29] hover:bg-[#933240] text-white'}`}
+                            onClick={handleSub}>
+                            {isSub ? 'Hủy theo dõi' : 
+                            <div className='flex'>Theo dõi <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/></div>}
+                      </button>
+                      :
+                      ''
+                    }
                   </div>
                 </div>
                 <div className='flex '>

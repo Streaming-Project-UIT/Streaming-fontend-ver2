@@ -11,20 +11,21 @@ import VideoComponent from '../components/VideoComponent';
 import { IoMdClose } from "react-icons/io";
 import Comment from '../components/Comment/Comment';
 import Loading from '../components/Loading';
+import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 const Profile = () => {
-    const userToken = localStorage.getItem('userToken');
-    const [avatar, setAvatar] = useState('');
-    const [username, setUsername] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [subcribe, setSubcribe] = useState('');
-    const [isMe, setIsMe] = useState(false);
+    const myId = localStorage.getItem('userToken');
+    const [searchParams] = useSearchParams();
+    const userToken = searchParams.get('userId')
     const [isFocusFilter, setFocused] = useState(false);
     const [isOpenComment, setIsOpenComment] = useState(false)
     const [videoIds, setVideoIds] = useState([]);
     const [values, setValueIds] = useState();
+    const [isSub, setIsSub] = useState(false)
+    const [numSub, setNumSub] = useState(0)
+    const [userDetail, setUserDetail] = useState()
 
     const handleChooseFilter = () =>
     {
@@ -38,30 +39,7 @@ const Profile = () => {
     {
         setIsOpenComment(false)
     }
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
-                const response = await fetch(`http://localhost:8080/listUserbyId/${userToken}`, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    setAvatar(data.avatar); // Lưu trữ chuỗi Base64 của avatar
-                    setUsername(data.username);
-                    setFirstName(data.firstName);
-                    setLastName(data.lastName);
-                    setSubcribe(data.subcribe);
-                } else {
-                    console.error('Failed to fetch profile');
-                }
-            } catch (error) {
-                console.error('Failed to fetch profile:', error);
-            }
-        };
-        fetchProfile();
-    }, []);
+
     
     useEffect(() => {
         const fetchVideoIds = async () => {
@@ -89,13 +67,70 @@ const Profile = () => {
       
         fetchVideoIds();
       }, []);
+
+
+    useEffect(()=>{
+        const getDetailUser = async () =>
+        {
+            try {
+                const data = await axios.get(`http://localhost:8080/user/listUserbyId/${userToken}`)
+                setUserDetail(data.data)
+            } catch (error) {
+                
+            }
+        }
+        const getSubscribe = async () =>
+        {
+            try {
+                // const data = await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${usId}&subscribedToId=${myId}`)
+                const numOfSubs= await axios.get(`http://localhost:8080/video/getSubscriberCount?userId=${userToken}`)
+                setNumSub(numOfSubs.data)
+                const dataIsSub = await axios.get(`http://localhost:8080/video/isSubscribed?subscriberId=${myId}&subscribedToId=${userToken}`)
+                setIsSub(dataIsSub.data)
+    
+            } catch (error) {
+            
+            }
+        }
+        getSubscribe()
+        getDetailUser()
+    },[])
     const generateThumbnailUrls = () => {
         return videoIds.map((id) => {
         return  `http://localhost:8080/video/get/${id}`
         });
     };
     
+    const actSubVideo = async(act) =>{
+        try {
+          if (!act)
+          {
+            await axios.post(`http://localhost:8080/video/subscribe?subscriberId=${myId}&subscribedToId=${userToken}`)
+          }
+          else{
+            await axios.post(`http://localhost:8080/video/unsubscribe?subscriberId=${myId}&subscribedToId=${userToken}`)
+          }
+        } catch (error) {
+          
+        }
+      }
+    const handleSub= (event) =>{
+        event.preventDefault();
+        if (!isSub)
+        {
+            setNumSub(numSub+1)
+            setIsSub(!isSub)
+            }
+        else 
+        {
+            setNumSub(numSub-1)
+            setIsSub(!isSub)
+        }
+        actSubVideo(isSub)
+    }
 
+
+    
     const thumbnails =  generateThumbnailUrls();
 
 
@@ -111,22 +146,22 @@ const Profile = () => {
             <form className=" bg-white shadow-md rounded px-8 pt-6 pb-8 mb-1 " onSubmit={handleSubmit}>
                 {/* {avatar && 
                 //<img src={`data:image/jpeg;base64, ${avatar}`} alt="Avatar" className="w-20 h-20 rounded-full mb-4" />} */}
-                
-                <img src={avar} alt="Avatar" className="z-10 shadow-xl border-[5px] cursor-pointer border-white top-[150px] left-1/2 
+                <img src={`data:image/jpeg;base64,${userDetail?.avatar}`} alt="Avatar" className="z-10 shadow-xl border-[5px] cursor-pointer border-white top-[150px] left-1/2 
                                 transform -translate-x-1/2 absolute w-[250px] h-[250px] rounded-full mb-4" />
 
                 <div className=' justify-center flex font-light text-[18px] '>
                         <div>
-                            <p className=" mt-[60px] text-[30px] font-bold w-auto mb-2 size-[25px]">{fn +" "+ ln}</p>
-                            <p className="mb-2 mt-[20px]  ">  Username: dangnguyen03  </p>
-                            <p className="mb-2 mt-[0px]  ">Email: 21520683@gm.uit.edu.vn</p>
+                            <p className=" mt-[60px] text-[30px] font-bold w-auto mb-2 size-[25px]">{userDetail?.firstName}  {userDetail?.lastName}</p>
+                            <p className="mb-2 mt-[20px]  ">  Username: {userDetail?.username}  </p>
+                            <p className="mb-2 mt-[0px]  ">Email: {userDetail?.email}</p>
 
-                            <div className='flex text-[20px] items-center font-Oswald font-medium mt-[10px] justify-between'>
-                                <p className=" ">Lượt theo dõi: 20</p>
-                                {!isMe?
-                                    <button className='flex  items-center bg-[#d00b29] hover:bg-[#933240] text-white px-[15px] py-[8px]  rounded-[5px]'>
-                                        Theo dõi                                    
-                                    <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/>
+                            <div className='flex text-[20px] gap-3 items-center font-Oswald font-medium mt-[10px] justify-between'>
+                                <p className=" ">Lượt theo dõi: {numSub}</p>
+                                {myId!==userToken?
+                                    <button className={`flex items-center text-white px-[15px] py-[8px] rounded-[5px]
+                                        ${isSub?' bg-[#a3a3a3] hover:bg-[#696969]':' bg-[#d00b29] hover:bg-[#933240]'}`}
+                                        onClick={handleSub}>{isSub?'Hủy theo dõi':'Theo dõi'}
+                                        <MdOutlineAddCircleOutline className='ml-[10px] size-[22px]'/>
                                     </button>:''
                                 }
                             </div>
@@ -140,25 +175,31 @@ const Profile = () => {
                         Video đã đăng
                         <IoIosCloudUpload className='ml-[5px]'/>
                         </button>
-                <button className={`flex items-center px-[15px] py-[10px] hover:text-black rounded-t-[10px] 
-                        ${!isFocusFilter?' text-[#717171] font-normal':'bg-white text-black font-bold'}`}
-                        onClick={handleChooseFilter}>
-                        Video đã thích
-                        <AiFillLike className='ml-[5px]'/>
-                </button>
+                {myId===userToken?
+                    <button className={`flex items-center px-[15px] py-[10px] hover:text-black rounded-t-[10px] 
+                            ${!isFocusFilter?' text-[#717171] font-normal':'bg-white text-black font-bold'}`}
+                            onClick={handleChooseFilter}>
+                            Video đã thích
+                            <AiFillLike className='ml-[5px]'/>
+                    </button>:<div></div>
+                }
             </div>
-            <div className='flex mx-[160px]'>
+            <div className='flex mx-[160px] justify-center'>
                 {
                     (values && values.length > 0 && thumbnails && thumbnails.length > 0)?
-                    <Mainvideo onClick={handleOpenComment} isActive={isOpenComment}
-                                            title={values[0]?.metadata?.videoName}
-                                            username={values[0]?.metadata?.userName}
-                                            timestamp={values[0]?.metadata?.timestamp}
-                                            view={values[0]?.views}
-                                            descript={values[0]?.metadata.description}
-                                            userid={values[0]?.metadata.userID}
-                                            videoId={videoIds[0]}
-                    />:<div></div>
+                    <div className='w-[1000px]'>
+                        <Mainvideo onClick={handleOpenComment} isActive={isOpenComment}
+                                                title={values[0]?.metadata?.videoName}
+                                                username={values[0]?.metadata?.userName}
+                                                timestamp={values[0]?.metadata?.timestamp}
+                                                view={values[0]?.views}
+                                                descript={values[0]?.metadata.description}
+                                                userid={values[0]?.metadata.userID}
+                                                videoId={videoIds[0]}
+                        />
+
+                    </div>
+                    :<div></div>
                 }
                 {
                     isOpenComment?

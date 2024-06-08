@@ -1,32 +1,25 @@
 import React, { useEffect, useState, useRef } from 'react';
 import logoApp from '../assets/images/logoApp.png'
-import avar from '../assets/images/avar.jpg'
 import { FiUpload } from "react-icons/fi";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoTriangle, IoSettingsSharp, IoLogOutSharp } from "react-icons/io5";
 import { MdAccountCircle } from "react-icons/md";
 import { FaAngleRight } from "react-icons/fa";
-import { Navigate, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 const NavbarApp = () => {
-    const [avatar, setAvatar] = useState('');
-    const [username, setUsername] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    let fullName = ''; // Khai báo biến fullName
+    // const [avatar, setAvatar] = useState('');
     const [searchValue, setSearchValue] = useState('');
-    const [isLogin, setIsLogin] = useState(true)
     const userToken = localStorage.getItem('userToken')
+    const avatar = localStorage.getItem('avatar')
     const navigate = useNavigate();
 
     const handleFindChange = (event) => {
         setSearchValue(event.target.value);
     };
-    // useEffect(() => {
-    //     fullName = firstName + " " + lastName;
-    // }, [firstName, lastName]);
+
     const vidufullName = localStorage.getItem('firstName')+ ' '+ localStorage.getItem('lastName')
     const [clickAvatar, setClickAvatar] = useState(false);
     const handleClickProfile = (e) =>
@@ -54,6 +47,18 @@ const NavbarApp = () => {
 
         }
     });
+    // useEffect(()=>{
+    //     const getDetailUser = async () =>
+    //     {
+    //         try {
+    //             const data = await axios.get(`http://localhost:8080/user/listUserbyId/${userToken}`)
+    //             setAvatar(data.data.avatar)
+    //         } catch (error) {
+                
+    //         }
+    //     }
+    //     getDetailUser()
+    // },[])
 
     const handleUpload = () =>
     {
@@ -104,14 +109,14 @@ const NavbarApp = () => {
                         <IoIosNotificationsOutline className='hover:bg-[#edebeb] rounded-[20px] size-[27px] cursor-pointer  ml-[15px]'/>
                         <div className='relative '>
                             <img  className= 'hover:shadow-md cursor-pointer w-[45px] h-[45px] mr-[30px] my-1 mx-[15px]  rounded-[50%] focus:outline-none focus:shadow-outline'
-                                src={avar}
+                                src={`data:image/jpeg;base64,${avatar}`}
                                 onClick={handleClickProfile} alt='avatar'/>
                             <div ref={menuRef}  className={` rounded-[10px] right-[20px] max-w-[400px]  min-w-[250px] top-[65px] w-auto h-auto absolute 
                                 ${!clickAvatar?'hidden':' border-[1px] mt-0 bg-white '}`}>
                                 <IoTriangle className=' text-white p-0 m-0  right-[17px] top-[-32px] size-[30px] mt-[15px]'/>
                                 <ul className=' cursor-pointer  mt-[-20px] text-[#545454]'>
                                     <li className='flex items-center'>
-                                        <img className='ml-[15px] h-[60px] rounded-[50%]' src={avar} alt='avatar'></img>
+                                        <img className='ml-[15px] h-[60px] w-[60px] rounded-[50%]' src={`data:image/jpeg;base64,${avatar}`} alt='avatar'></img>
                                         <p className='mx-[15px] font-bold pr-[15px] text-[18px]'>{vidufullName}</p>
                                     </li>
                                     <div className='flex justify-center mx-[15px]'>
@@ -120,13 +125,14 @@ const NavbarApp = () => {
                                     <div className='hover:text-black flex cursor-pointer items-center my-[10px]'>
                                             <MdAccountCircle className=' size-[30px] mx-[15px]'/>
                                             <li className=' font-medium hover:font-bold w-[150px] '
-                                                onClick={()=>{navigate('/profile')}}> Hồ sơ 
+                                                onClick={()=>{navigate(`/profile?userId=${userToken}`)}}> Hồ sơ 
                                             </li>
                                             <FaAngleRight className=' ml-auto mr-[15px]' />
                                     </div>
                                     <div className='hover:text-black flex cursor-pointer items-center my-[10px]'>
                                             <IoSettingsSharp className=' size-[30px] mx-[15px]'/>
-                                            <li className=' font-medium hover:font-bold w-[150px] '> Cài đặt
+                                            <li className=' font-medium hover:font-bold w-[150px] '
+                                            onClick={()=>{navigate(`/change`)}}> Cài đặt
                                             </li>
                                             <FaAngleRight className='ml-auto mr-[15px]' />
                                     </div>
@@ -135,25 +141,12 @@ const NavbarApp = () => {
                                             <li className=' font-medium hover:font-bold w-[150px]  '
                                         
                                                     onClick={() => {
-                                                        // fetch('http://localhost:8080/logout', {
-                                                        //     method: 'POST',
-                                                        //     credentials: 'include'
-                                                        // })
-                                                        //     .then(response => {
-                                                        //         if (response.ok) {
-                                                        //             navigate('/login');
-                                                        //         } else {
-                                                        //             throw new Error('Logout failed');
-                                                        //         }
-                                                        //     })
-                                                        //     .catch(error => {
-                                                        //         console.error(error);
-                                                        // });
-                                                        // navigate('/login');
-
                                                         localStorage.removeItem('userToken');
                                                         localStorage.removeItem('firstName');
                                                         localStorage.removeItem('lastName');
+                                                        localStorage.removeItem('avatar');
+                                                        localStorage.removeItem('userName');
+
                                                         navigate('/login');
                                                     }}
                                     

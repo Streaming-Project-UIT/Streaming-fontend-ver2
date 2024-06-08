@@ -6,7 +6,7 @@ import axios from "axios";
 
 const Mainvideo = (props) =>
 {
-    const myId = localStorage.getItem('userName')
+    const myId = localStorage.getItem('userToken')
 
     const videoRef = useRef(null);
     const [videoHeight, setVideoHeight] = useState('auto');
@@ -15,22 +15,7 @@ const Mainvideo = (props) =>
     const [isLike, setIsLike] = useState(false)
     const [displayVideo, setDisplayVideo] = useState()
 
-    useEffect(()=>{
-        const getLike= async() =>
-            {
-              try {
-                const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${displayVideo}`);
-                setNumLike(data.data)
-                
-                const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${displayVideo}`);
-                setIsLike(dataIsLike.data)
-        
-              } catch (error) {
-                
-              }
-            }
-        getLike()
-    },[])
+
     const handleGetVideoId = async ( videoId) => {
         const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + videoId;
         const response = await fetch(apiUrl);
@@ -40,6 +25,17 @@ const Mainvideo = (props) =>
               'Content-Type': 'application/json'
             },})
         setDisplayVideo(result)
+        try {
+          const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${result}`);
+          console.log('dis',displayVideo)
+          setNumLike(data.data)
+          
+          const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${result}`);
+          setIsLike(dataIsLike.data)
+  
+        } catch (error) {
+          
+        }
       };
     const actLikeVideo = async(act) =>{
         try {
@@ -104,8 +100,8 @@ const Mainvideo = (props) =>
     return(
         <div className=''>
             <div className='flex justify-center'>
-                <div className=' h-auto bg-white'>
-                    <video src ={st} controls  
+                <div className='w-full h-auto bg-white'>
+                    <video src ={`http://localhost:8080/video/get/${displayVideo}`} controls  
                         autoPlay
                         muted
                         loop
@@ -130,9 +126,13 @@ const Mainvideo = (props) =>
                         Xem bình luận</button>
                     <div className='flex '>
                         <button className='items-center select-none disabled flex py-[8px] px-[20px] rounded-[20px]  bg-[#f3f3f3]'
-                           >
-                            {numLike} lượt thích
-                            {/* <AiOutlineLike className='size-[30px] ml-[5px]'/> */}
+                          onClick={handleLike} >
+                          {numLike}
+                          {!isLike?
+                            <AiOutlineLike className='size-[30px] ml-[5px]'/>:
+                            <AiFillLike className='size-[30px] ml-[5px]'/>
+                  
+                          }
                         </button>
                         <button className='items-center ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
                             Chia sẻ
