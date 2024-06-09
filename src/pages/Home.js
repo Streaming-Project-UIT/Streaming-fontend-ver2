@@ -89,7 +89,7 @@ const Home = () => {
   const thumbnails =  generateThumbnailUrls();
 
   
-
+  const start = 4
   return (
     <div>
       <NavbarApp />
@@ -116,7 +116,7 @@ const Home = () => {
         ) : (
           <Loading/>
         )}
-        <LuMoveRight className='absolute right-[-12px] border border-[#474747] top-[35%] rounded-[50%] cursor-pointer p-2 bg-[#f0f4f9] size-[50px]' />
+        {/* <LuMoveRight className='absolute right-[-12px] border border-[#474747] top-[35%] rounded-[50%] cursor-pointer p-2 bg-[#f0f4f9] size-[50px]' /> */}
       </div>
 
       <div className='flex items-center mb-3 pl-[20px] pt-[20px] w-3/5 text-black font-bold'>
@@ -125,9 +125,22 @@ const Home = () => {
       </div>
 
       <div className='flex flex-wrap mr-3'>
-        {thumbnails.slice(4).map((url, index) => (
-            <VideoComponent img={url} videoId={videoIds[index]} />
-        ))}
+        {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
+            thumbnails.slice(start).map((url, index) => (
+              <VideoComponent
+                key={videoIds[index+start]}
+                img={url}
+                title={values[index+start]?.metadata?.videoName}
+                username={values[index +start]?.metadata?.userName}
+                timestamp={values[index+start]?.metadata?.timestamp}
+                view={values[index +start]?.views}
+                videoId={videoIds[index +start]}
+                userid={values[index +start]?.metadata.userID}
+              />
+            ))
+          ) : (
+            <Loading/>
+          )}
       </div>
     </div>
   );

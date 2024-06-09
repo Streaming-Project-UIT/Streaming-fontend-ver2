@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Navbar from '../components/NavbarApp';
 import bgWall from '../assets/images/bgWall.jpg'
-import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { IoIosCloudUpload } from "react-icons/io";  
 import { AiFillLike, AiOutlineLike } from "react-icons/ai";
@@ -13,10 +12,11 @@ import Comment from '../components/Comment/Comment';
 import Loading from '../components/Loading';
 import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import ViewAvatar from '../components/Profile/ViewAvatar';
 
 const Profile = () => {
     const myId = localStorage.getItem('userToken');
+    const avar = localStorage.getItem('avatar')
     const [searchParams] = useSearchParams();
     const userToken = searchParams.get('userId')
     const [isFocusFilter, setFocused] = useState(false);
@@ -26,10 +26,17 @@ const Profile = () => {
     const [isSub, setIsSub] = useState(false)
     const [numSub, setNumSub] = useState(0)
     const [userDetail, setUserDetail] = useState()
-
-    const handleChooseFilter = () =>
+    const [listLike, setListLike] = useState(false)
+    const [isShowAvatar, setIsShowAvatar] = useState(false)
+    const handleChooseUpload = () =>
     {
-        setFocused(!isFocusFilter);
+        setListLike(false)
+        setFocused(false);
+    }
+    const handleChooseLike = () =>
+    {
+        setListLike(true)
+        setFocused(true);
     }
     const handleOpenComment = () =>
     {
@@ -44,7 +51,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchVideoIds = async () => {
           try {
-            const response = await fetch('http://localhost:8080/video/listIdThumbnail');
+            const response = await fetch(`http://localhost:8080/video/get${listLike?'IdFromLikerToId':'DetailsByUserId'}/${userToken}`);
             if (!response.ok) {
               throw new Error('Failed to fetch video ids');
             }
@@ -66,7 +73,7 @@ const Profile = () => {
         };
       
         fetchVideoIds();
-      }, []);
+      }, [userToken, listLike]);
 
 
     useEffect(()=>{
@@ -94,12 +101,8 @@ const Profile = () => {
         }
         getSubscribe()
         getDetailUser()
-    },[])
-    const generateThumbnailUrls = () => {
-        return videoIds.map((id) => {
-        return  `http://localhost:8080/video/get/${id}`
-        });
-    };
+    },[userToken, listLike])
+
     
     const actSubVideo = async(act) =>{
         try {
@@ -130,24 +133,42 @@ const Profile = () => {
     }
 
 
-    
+    const generateThumbnailUrls = () => {
+        return videoIds.map((id) => {
+        return  `http://localhost:8080/video/get/${id}`
+        });
+    };
     const thumbnails =  generateThumbnailUrls();
 
+    const handleShowAvatar = () =>
+    {
+        setIsShowAvatar(!isShowAvatar)
+    }
 
-    const fn = 'Nguyễn Thành'
-    const ln = 'Đăng'
+
     const handleSubmit = async (event) => {};
 
     return (
         <div className="bg-[#f0f4f9]  relative ">
             <Navbar />
+            {isShowAvatar?
+                <div className='flex justify-center w-screen h-auto'>
+                    <div className='w-[500px] z-30'>
+
+                        <ViewAvatar im={userDetail?.avatar} handle={handleShowAvatar}/>
+                    </div>
+                </div>:<div></div>
+
+            }
+
             <div className='h-[60px]'></div>
             <img src={bgWall} alt='Bg-persional' className=' w-full h-[260px] object-cover' />
             <form className=" bg-white shadow-md rounded px-8 pt-6 pb-8 mb-1 " onSubmit={handleSubmit}>
                 {/* {avatar && 
                 //<img src={`data:image/jpeg;base64, ${avatar}`} alt="Avatar" className="w-20 h-20 rounded-full mb-4" />} */}
-                <img src={`data:image/jpeg;base64,${userDetail?.avatar}`} alt="Avatar" className="z-10 shadow-xl border-[5px] cursor-pointer border-white top-[150px] left-1/2 
-                                transform -translate-x-1/2 absolute w-[250px] h-[250px] rounded-full mb-4" />
+                <img src={`data:image/jpeg;base64,${userDetail?.avatar}`} alt="Avatar" className="z-10 shadow-xl border-[5px]  border-white top-[150px] left-1/2 
+                                transform -translate-x-1/2 absolute w-[250px] h-[250px] rounded-full mb-4 cursor-zoom-in bg-white" 
+                                onClick={handleShowAvatar}/>
 
                 <div className=' justify-center flex font-light text-[18px] '>
                         <div>
@@ -156,7 +177,7 @@ const Profile = () => {
                             <p className="mb-2 mt-[0px]  ">Email: {userDetail?.email}</p>
 
                             <div className='flex text-[20px] gap-3 items-center font-Oswald font-medium mt-[10px] justify-between'>
-                                <p className=" ">Lượt theo dõi: {numSub}</p>
+                                <p className=" ">Lượt theo dõi:  {numSub === null || numSub === undefined?'0': numSub}</p>
                                 {myId!==userToken?
                                     <button className={`flex items-center text-white px-[15px] py-[8px] rounded-[5px]
                                         ${isSub?' bg-[#a3a3a3] hover:bg-[#696969]':' bg-[#d00b29] hover:bg-[#933240]'}`}
@@ -171,14 +192,14 @@ const Profile = () => {
             <div className='flex justify-center font-normal font-Oswald text-[#717171]'>
                 <button className={`flex items-center px-[15px] py-[10px] hover:text-black rounded-t-[10px] 
                         ${isFocusFilter?' text-[#717171] font-normal':'bg-white text-black font-bold'}`}
-                        onClick={handleChooseFilter}>
+                        onClick={handleChooseUpload}>
                         Video đã đăng
                         <IoIosCloudUpload className='ml-[5px]'/>
                         </button>
                 {myId===userToken?
                     <button className={`flex items-center px-[15px] py-[10px] hover:text-black rounded-t-[10px] 
                             ${!isFocusFilter?' text-[#717171] font-normal':'bg-white text-black font-bold'}`}
-                            onClick={handleChooseFilter}>
+                            onClick={handleChooseLike}>
                             Video đã thích
                             <AiFillLike className='ml-[5px]'/>
                     </button>:<div></div>
@@ -220,6 +241,7 @@ const Profile = () => {
                 <IoMdMenu className='cursor-pointer size-[25px]' />
             </div>
             <div className='flex flex-wrap mx-[90px] font-normal font-Oswald text-[#717171]'>
+                {console.log(videoIds[0])}
             {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
           thumbnails.slice(0).map((url, index) => (
                 <VideoComponent
@@ -234,12 +256,15 @@ const Profile = () => {
                     />
                 ))
                 ) : (
-                <Loading/>
+                    <div className='flex justify-center '>
+                        <Loading/>
+                    </div>
                 )}
 
 
             </div>
         </div>
+
     );
 };
 

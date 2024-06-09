@@ -7,7 +7,6 @@ import axios from "axios";
 const Mainvideo = (props) =>
 {
     const myId = localStorage.getItem('userToken')
-
     const videoRef = useRef(null);
     const [videoHeight, setVideoHeight] = useState('auto');
     const [values, setValueIds] = useState();
@@ -26,11 +25,11 @@ const Mainvideo = (props) =>
             },})
         setDisplayVideo(result)
         try {
-          const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${result}`);
+          const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${videoId}`);
           console.log('dis',displayVideo)
           setNumLike(data.data)
           
-          const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${result}`);
+          const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${videoId}`);
           setIsLike(dataIsLike.data)
   
         } catch (error) {
@@ -45,10 +44,10 @@ const Mainvideo = (props) =>
           }
           if (!act)
           {
-            await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${displayVideo}`, body)
+            await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${props?.videoId}`, body)
           }
           else{
-            await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${displayVideo}`, body)
+            await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${props?.videoId}`, body)
           }
         } catch (error) {
           
@@ -127,7 +126,7 @@ const Mainvideo = (props) =>
                     <div className='flex '>
                         <button className='items-center select-none disabled flex py-[8px] px-[20px] rounded-[20px]  bg-[#f3f3f3]'
                           onClick={handleLike} >
-                          {numLike}
+                          {numLike === null || numLike === undefined?'0': numLike}
                           {!isLike?
                             <AiOutlineLike className='size-[30px] ml-[5px]'/>:
                             <AiFillLike className='size-[30px] ml-[5px]'/>

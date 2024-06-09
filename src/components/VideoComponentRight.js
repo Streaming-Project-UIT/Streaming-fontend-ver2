@@ -35,8 +35,10 @@ const VideoComponentRight = (props) =>
     return(
         <div className='pl-[20px] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]' onClick={()=>handleClick(props?.videoId)}>
 
-            
-            <img className='w-1/2 rounded-[20px]' src={props?.img} alt='other'/>
+            <div className="w-[650px] h-[170px] ">
+              <img className='w-full h-full rounded-[20px]' src={props?.img} alt='other'/>
+
+            </div>
             <div className='font-roboto ml-[20px] w-full mr-2  '>
                 <p className='text-[19px] font-bold text-black'>{props?.title}</p>
                 <p className='text-[16px]'>{props?.username}</p>

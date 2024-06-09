@@ -20,6 +20,7 @@ const Video = (props) => {
   const videoId = searchParams.get('videoId');
   const view = searchParams.get('v');
   const usId = searchParams.get('id')
+  const thumbId = searchParams.get('thumb')
   const myId = localStorage.getItem('userToken')
   const [videoInfor, setVideoInfor] = useState()
 
@@ -105,10 +106,10 @@ const Video = (props) => {
     const getLike= async() =>
     {
       try {
-        const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${videoId}`);
+        const data = await axios.get(`http://localhost:8080/video/getLikeCount?videoId=${thumbId}`);
         setNumLike(data.data)
         
-        const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${videoId}`);
+        const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${thumbId}`);
         console.log('ok',dataIsLike.data)
         setIsLike(dataIsLike.data)
 
@@ -142,10 +143,10 @@ const Video = (props) => {
       }
       if (!act)
       {
-        await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${videoId}`, body)
+        await axios.post(`http://localhost:8080/video/like?likerToId=${myId}&likedToId=${thumbId}`, body)
       }
       else{
-        await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${videoId}`, body)
+        await axios.post(`http://localhost:8080/video/unlike?likerToId=${myId}&likedToId=${thumbId}`, body)
       }
     } catch (error) {
       
@@ -256,7 +257,7 @@ const thumbnails =  generateThumbnailUrls();
                     <img alt='avar' src={avar} className='rounded-[50%] size-[50px] cursor-pointer' onClick={handleClickChannel}/>
                     <div>
                       <p className='text-[20px] cursor-pointer' onClick={handleClickChannel}>{videoInfor?.metadata.userName}</p>
-                      <p className='text-[#606060]'>Theo dõi: {numSub}</p>
+                      <p className='text-[#606060]'>Theo dõi: {numSub === null || numSub === undefined?'0': numSub}</p>
                     </div>
                     {
                       usId!==myId?
@@ -288,7 +289,8 @@ const thumbnails =  generateThumbnailUrls();
             </div>
             <div className=' bg-white'>
                 <p className='font-medium rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
-                  {view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
+                  {console.log(view)}
+                  {view === undefined || view === null? '0':view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
 
                     <br/>
                     <p className='leading-6 mt-[5px] font-normal'>
