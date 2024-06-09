@@ -97,7 +97,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
                     <p>Để trải nghiệm ứng dụng tốt nhất</p>
                 </div>
                 <div className='w-[550px] h-[345px] '>
-                    <form className="h-full w-full p-[30px] align-middle  shadow-none border-none  shadow-md rounded " onSubmit={handleSubmit}>
+                    <form className="h-full w-full p-[30px] align-middle  border-none  shadow-md rounded " onSubmit={handleSubmit}>
 
 
                         <div className='mt-[30px]'>

@@ -132,7 +132,7 @@ const NavbarApp = () => {
                                     <div className='hover:text-black flex cursor-pointer items-center my-[10px]'>
                                             <IoSettingsSharp className=' size-[30px] mx-[15px]'/>
                                             <li className=' font-medium hover:font-bold w-[150px] '
-                                            onClick={()=>{navigate(`/change`)}}> Cài đặt
+                                            onClick={()=>{navigate(`/change`)}}> Tài khoản
                                             </li>
                                             <FaAngleRight className='ml-auto mr-[15px]' />
                                     </div>
