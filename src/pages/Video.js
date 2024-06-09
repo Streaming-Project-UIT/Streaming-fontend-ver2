@@ -257,7 +257,7 @@ const thumbnails =  generateThumbnailUrls();
                     <img alt='avar' src={avar} className='rounded-[50%] size-[50px] cursor-pointer' onClick={handleClickChannel}/>
                     <div>
                       <p className='text-[20px] cursor-pointer' onClick={handleClickChannel}>{videoInfor?.metadata.userName}</p>
-                      <p className='text-[#606060]'>Theo dõi: {numSub === null || numSub === undefined?'0': numSub}</p>
+                      <p className='text-[#606060]'>Theo dõi: {numSub === 'undefined' || numSub === undefined?'0': numSub}</p>
                     </div>
                     {
                       usId!==myId?
@@ -290,7 +290,7 @@ const thumbnails =  generateThumbnailUrls();
             <div className=' bg-white'>
                 <p className='font-medium rounded-[10px] my-[5px] px-[15px] py-[8px] bg-[#f2f2f2] '> 
                   {console.log(view)}
-                  {view === undefined || view === null? '0':view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
+                  {view === undefined || view === 'undefined'? '0':view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
 
                     <br/>
                     <p className='leading-6 mt-[5px] font-normal'>

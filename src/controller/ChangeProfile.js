@@ -12,7 +12,7 @@ const ChangeProfile  = () =>
     const [activeTab, setActiveTab] = useState('password');
     const currentFirstName = localStorage.getItem('firstName')
     const currentLastName = localStorage.getItem('lastName')
-
+    const ava = localStorage.getItem('avatar')
     const [currentPass, setCurrentPass] = useState('')
     const [newPass, setNewPass] = useState('')
     const [newConfirmPass, setNewConfirmPass] = useState('')
@@ -47,8 +47,8 @@ const ChangeProfile  = () =>
     const handleThumbnailChange = (event) => {
         const file = event.target.files[0];
         setAvar(URL.createObjectURL(file));
-        };
-        const handleTabClick = (tab) => {
+    };
+    const handleTabClick = (tab) => {
         setActiveTab(tab);
     };
 
@@ -60,7 +60,7 @@ const ChangeProfile  = () =>
     const handleSubmitChangePsw = async(event) =>{
         event.preventDefault();
         if (newPass !== newConfirmPass)
-            alert('Hai password khác nhau')
+            return alert('Hai password khác nhau')
         const bodyData = {
             currentPassword: currentPass,
             newPassword: newPass
@@ -90,9 +90,11 @@ const ChangeProfile  = () =>
                         <FaRegImage className="z-50 size-[18px] cursor-pointer"/>
                         <input type="file" id="file-input" accept=".png, .jpg" onChange={handleThumbnailChange}  class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
                     </label>
-                    <img src={avar} alt="Avatar" className="z-10  shadow-xl border-[5px]  border-[#cccccc] 
-                        h-[200px] w-[200px] rounded-[50%] mb-4"  >
-                    </img>
+                    <img
+                        src={avar === null ? `data:image/jpeg;base64,${ava}` : avar}
+                        alt="Avatar"
+                        className="z-10 shadow-xl border-[5px] border-[#cccccc] h-[200px] w-[200px] rounded-[50%] mb-4"
+                        />
                     
                 </div>
                 {

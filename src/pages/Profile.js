@@ -257,7 +257,8 @@ const Profile = () => {
                 ))
                 ) : (
                     <div className='flex justify-center '>
-                        <Loading/>
+                        {/* <Loading/> */}
+                        <p className='ml-5 text-[#ff4b4b] text-[25px]'>Chưa có dữ liệu nào thu được</p>
                     </div>
                 )}
 

@@ -85,10 +85,60 @@ const Home = () => {
       });
   };
   
+  function getSortedIndexes(values) {
+    // Kiểm tra xem values có hợp lệ không
+    if (!values || values.length === 0) {
+      return [];
+    }
+  
+    // Tạo một mảng chứa các index ban đầu
+    const indexes = Array.from({ length: values.length }, (_, i) => i);
+  
+    // Sort mảng indexes dựa trên giá trị views trong mảng values
+    indexes.sort((a, b) => values[b].views - values[a].views);
+  
+
+    // Tạo một mảng chứa các index ban đầu
+    const indexesSmall = Array.from({ length: values.length }, (_, i) => i);
+
+  // Sort mảng indexes dựa trên giá trị views trong mảng values từ bé đến lớn
+  indexesSmall.sort((a, b) => {
+    // Lấy giá trị views và timestamp của mỗi phần tử
+    const viewsA = values[a].views !== undefined ? values[a].views : 0;
+    const viewsB = values[b].views !== undefined ? values[b].views : 0;
+    const timestampA = values[a].metadata.timestamp;
+    const timestampB = values[b].metadata.timestamp;
+  
+    // So sánh giá trị views
+    if (viewsA !== viewsB) {
+      return viewsA - viewsB;
+    } else {
+      // Nếu views bằng nhau, so sánh timestamps ngược lại
+      if (timestampA && timestampB) {
+        return new Date(timestampB) - new Date(timestampA); // Đảo ngược để timestamp mới nhất trước
+      } else if (!timestampA && !timestampB) {
+        // Nếu cả hai timestamp đều undefined, coi chúng là bằng nhau
+        return 0;
+      } else if (!timestampA) {
+        // Nếu timestampA undefined, đặt timestampB lên trên
+        return 1;
+      } else {
+        // Nếu timestampB undefined, đặt timestampA lên trên
+        return -1;
+      }
+    }
+  });
+    const newIndexes = indexes.slice(0,4).concat(indexesSmall.slice(0, indexesSmall.length-4))
+    return newIndexes;
+
+  }
 
   const thumbnails =  generateThumbnailUrls();
 
-  
+  const [indexs, setIndexs] = useState([])
+  useEffect(()=>{
+    setIndexs( getSortedIndexes(values))
+  },[values])
   const start = 4
   return (
     <div>
@@ -103,14 +153,14 @@ const Home = () => {
       {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
           thumbnails.slice(0, 4).map((url, index) => (
             <VideoComponent
-              key={videoIds[index]}
-              img={url}
-              title={values[index]?.metadata?.videoName}
-              username={values[index]?.metadata?.userName}
-              timestamp={values[index]?.metadata?.timestamp}
-              view={values[index]?.views}
-              videoId={videoIds[index]}
-              userid={values[index]?.metadata.userID}
+              key={videoIds[indexs[index]]}
+              img={thumbnails[indexs[index]]}
+              title={values[indexs[index]]?.metadata?.videoName}
+              username={values[indexs[index]]?.metadata?.userName}
+              timestamp={values[indexs[index]]?.metadata?.timestamp}
+              view={values[indexs[index]]?.views}
+              videoId={videoIds[indexs[index]]}
+              userid={values[indexs[index]]?.metadata.userID}
             />
           ))
         ) : (
@@ -128,14 +178,14 @@ const Home = () => {
         {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
             thumbnails.slice(start).map((url, index) => (
               <VideoComponent
-                key={videoIds[index+start]}
-                img={url}
-                title={values[index+start]?.metadata?.videoName}
-                username={values[index +start]?.metadata?.userName}
-                timestamp={values[index+start]?.metadata?.timestamp}
-                view={values[index +start]?.views}
-                videoId={videoIds[index +start]}
-                userid={values[index +start]?.metadata.userID}
+                key={videoIds[indexs[index+start]]}
+                img={thumbnails[indexs[index +start]]}
+                title={values[indexs[index+start]]?.metadata?.videoName}
+                username={values[indexs[index +start]]?.metadata?.userName}
+                timestamp={values[indexs[index+start]]?.metadata?.timestamp}
+                view={values[indexs[index +start]]?.views}
+                videoId={videoIds[indexs[index +start]]}
+                userid={values[indexs[index +start]]?.metadata.userID}
               />
             ))
           ) : (

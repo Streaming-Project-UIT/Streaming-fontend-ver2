@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NavbarApp from '../components/NavbarApp'
-
+import logo from '../assets/images/logo.png'
 
 const UploadVideo = () => {
     const [file, setFile] = useState(null);
@@ -8,6 +8,12 @@ const UploadVideo = () => {
     const [description, setDescription] = useState('');
     const userToken = localStorage.getItem('userToken');
     const [thumbnail, setThumbnail] = useState(null);
+
+    const [avar, setAvar] = useState(null);
+    useEffect(()=>{
+
+    },[avar])
+
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
@@ -15,6 +21,7 @@ const UploadVideo = () => {
     const handleThumbnailChange = (event) => {
         const selectedThumbnail = event.target.files[0];
         setThumbnail(selectedThumbnail);
+        setAvar(URL.createObjectURL(selectedThumbnail));
     }
 
     const handleTitleChange = (event) => {
@@ -69,11 +76,20 @@ const UploadVideo = () => {
                             <input type="file" id="file" accept=".mp4" onChange={handleFileChange} 
                             className="border w-full rounded-[10px] border-gray-300 p-2" />
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-2">
                             <label htmlFor="file" className="block">Ảnh thu nhỏ:</label>
                             <input type="file" id="thumbnail" accept=".png, .jpg" onChange={handleThumbnailChange} 
                             className="border  w-full rounded-[10px] border-gray-300 p-2" />
                         </div>
+                        {
+                            avar!==null?
+                            <div className="mb-5 flex justify-center">
+                                <img src={avar} alt='Thumb'></img>
+                            </div>
+                            :
+                            <div></div>
+
+                        }
                         <div className="mb-4">
                             <label htmlFor="videoName" className="block">Tiêu đề:</label>
                             <input type="text" id="videoName" value={videoName} onChange={handleTitleChange} 

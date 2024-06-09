@@ -19,7 +19,7 @@ const Register = () => {
       return;
     }
     try {
-      alert('Một email xác thực đã được gửi đến hòm thư của bạn. Vui lòng kiểm tra và nhập mã xác thực để hoàn tất đăng ký!');
+      // alert('Một email xác thực đã được gửi đến hòm thư của bạn. Vui lòng kiểm tra và nhập mã xác thực để hoàn tất đăng ký!');
        const emailVerificationResponse = await fetch('http://localhost:8080/user/send-verification-email', {
           method: 'POST',
           headers: {
