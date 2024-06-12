@@ -11,6 +11,8 @@ import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import CopyButton from '../components/ButtonCustom/CopyButton';
+import { MdModeEditOutline } from "react-icons/md";
+import { RiUpload2Line } from "react-icons/ri";
 
 const Video = (props) => {
   const navigate = useNavigate()
@@ -97,7 +99,6 @@ const Video = (props) => {
       try {
         const data = await axios.get(`http://localhost:8080/user/listUserbyId/${usId}`)
         setInforChannel(data.data)
-        console.log('img',data.data)
       } catch (error) {
         notify('Có lỗi khi lấy thông tin từ video',2)
       }
@@ -125,7 +126,6 @@ const Video = (props) => {
         setNumLike(data.data)
         
         const dataIsLike = await axios.get(`http://localhost:8080/video/isLiked?likerToId=${myId}&likedToId=${thumbId}`);
-        console.log('ok',dataIsLike.data)
         setIsLike(dataIsLike.data)
 
       } catch (error) {
@@ -236,17 +236,58 @@ const Video = (props) => {
     fetchVideoIds();
   }, []);
   
-const generateThumbnailUrls = () => {
-    return videoIds.map((id) => {
-    return  `http://localhost:8080/video/get/${id}`
-    });
-};
-const handleClickChannel = () =>
-{
-  navigate(`/profile?userId=${usId}`)
-}
+  const generateThumbnailUrls = () => {
+      return videoIds.map((id) => {
+      return  `http://localhost:8080/video/get/${id}`
+      });
+  };
+  const handleClickChannel = () =>
+  {
+    navigate(`/profile?userId=${usId}`)
+  }
 
-const thumbnails =  generateThumbnailUrls();
+  const thumbnails =  generateThumbnailUrls();
+
+  const [showEditDes, setEditDes] = useState(false)
+  const [descipt, setDescipt] = useState(videoInfor?.metadata.description || '');
+  const handleDesciptChange = (e) => {
+    setDescipt(e.target.value);
+  };
+  const handleClickEdit = () =>
+  {
+    setEditDes(!showEditDes)
+    setDescipt(videoInfor?.metadata.description)
+  }
+  const handleClickSaveDes= async()=>{
+    try {
+      const data = await axios.put(`http://localhost:8080/video/editDescription/${videoId}?description=${descipt}`)
+      notify('Cập nhật mô tả thành công!',1)
+      setEditDes(false)
+    } catch (error) {
+      notify('Cập nhật mô tả thất bại!',2)
+    }
+  }
+
+  const [showEditTitle, setEditTitle] = useState(false)
+  const [videoName, setVideoName] = useState(videoInfor?.metadata.videoName || '');
+    const handleClickTitle = () =>
+    {
+      setEditTitle(!showEditTitle)
+      setVideoName(videoInfor?.metadata.videoName)
+    }
+    const handleClickSaveTiltle= async()=>{
+      // try {
+      //   const data = await axios.put(`http://localhost:8080/video/editDescription/${videoId}?description=${videoName}`)
+      //   notify('Cập nhật mô tả thành công!',1)
+      //   setEditTitle(false)
+      // } catch (error) {
+      //   notify('Cập nhật mô tả thất bại!',2)
+      // }
+    }
+
+  const handleVideoNameChange = (e) => {
+    setVideoName(e.target.value);
+  };
   return (
     <div>
       <NavbarApp/>
@@ -264,8 +305,34 @@ const thumbnails =  generateThumbnailUrls();
                     className=' pb-[15px] w-full h-full'
                     type="video/mp4"/>
             </div>
-            <p className='font-medium font-roboto my-[10px]  bg-white  text-[24px]'>
-                    {videoInfor?.metadata.videoName}  
+            <p className='font-medium font-roboto my-[10px] flex gap-3  bg-white  text-[24px]'>
+                  {
+                        showEditTitle?
+                          <div className='w-full'>
+                            <textarea value={videoName}
+                              onChange={handleVideoNameChange}
+                              className='focus:border-[#ff6060] border-[2px] w-full break-normal rounded-[10px] h-auto break-all my-1 px-4 py-2'
+                              placeholder='Nhập thay đổi ở đây'></textarea>
+                            <div className='flex gap-2 justify-center items-center cursor-pointer hover:bg-[#979797] px-2 py-1 mb-2 rounded-[10px] w-[100px] bg-[#d1d1d1]'
+                              onClick={handleClickSaveTiltle}>
+                              <RiUpload2Line className=''/>
+                              <p className='text-[17px]'>Lưu</p>  
+                            </div>
+                          </div>
+                          :
+                          <div>
+                            {videoInfor?.metadata.videoName}  
+
+                          </div>
+
+                    }
+                    { 
+                        usId===myId?
+                          <MdModeEditOutline className='size-[30px] mr-2 cursor-pointer px-1 py-1 rounded-[10px] hover:bg-[#dadada]'
+                              onClick={handleClickTitle}/>:
+                          <div></div>
+
+                      }
                 </p>
             <hr></hr>
             <div className='font-roboto flex justify-between bg-white pb-[15px] px-[5px] pt-[10px]'>
@@ -311,14 +378,40 @@ const thumbnails =  generateThumbnailUrls();
                   {view === undefined || view === 'undefined'? '0':view}&nbsp;lượt xem&nbsp;|&nbsp;{formatTime}
 
                     <br/>
-                    <p className='leading-6 mt-[5px] font-normal'>
-                      {videoInfor?.metadata.description}
-                       </p>
+                    <div className='flex justify-between'>
+                      <p className='leading-6 mt-[5px] font-normal'>
+                        {!showEditDes? videoInfor?.metadata.description:''}
+                      </p>
+                      { 
+                        usId===myId?
+                          <MdModeEditOutline className='size-[30px] mr-2 cursor-pointer px-1 py-1 rounded-[10px] hover:bg-[#dadada]'
+                              onClick={handleClickEdit}/>:
+                          <div></div>
+
+                      }
+                    </div>
+                    {
+                        showEditDes?
+                          <div>
+                            <textarea  value={descipt}
+                              onChange={handleDesciptChange}
+                              className='w-full break-normal rounded-[10px] h-auto break-all my-2 px-4 py-2'
+                              placeholder='Nhập thay đổi ở đây'></textarea>
+                            <div className='flex gap-2 justify-center items-center cursor-pointer hover:bg-[#979797] px-2 py-1 rounded-[10px] w-[100px] bg-[#d1d1d1]'
+                                onClick={handleClickSaveDes}>
+                              <RiUpload2Line className=''/>
+                              <p className='text-[17px]'>Lưu</p>  
+                            </div>
+                          </div>
+                          :
+                          <div></div>
+
+                    }
                 </p>
             </div>
             <div className='my-[40px]'>
 
-              <Comment/>
+              <Comment videoId={videoId}/>
             </div>
         </div>
 
@@ -341,11 +434,7 @@ const thumbnails =  generateThumbnailUrls();
                 ) : (
                 <Loading/>
                 )}
-          {/* <VideoComponentRight img={thumnail}/>   
-          <VideoComponentRight img={thumnail}/>   
-          <VideoComponentRight img={thumnail}/>   
-          <VideoComponentRight img={thumnail}/>   
-          <VideoComponentRight img={thumnail}/>    */}
+
         </div>
 
       </div>

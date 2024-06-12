@@ -28,7 +28,7 @@ const VideoComponentRight = (props) =>
         const result = await response.text();
         const apiVideo = "http://localhost:8080/video/get/" + result;
         console.log(apiVideo)
-        navigate(`/video?videoId=${result}`)
+        navigate(`/video?videoId=${result}&v=${props?.view}&id=${props?.userid}&thumb=${videoId}`)
         window.location.reload()
       };
       const timestamp = new Date(props?.timestamp);

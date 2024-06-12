@@ -28,7 +28,8 @@ const VideoSearch = (props) =>
         const result = await response.text();
         const apiVideo = "http://localhost:8080/video/get/" + result;
         console.log(apiVideo)
-        navigate(`/video?videoId=${result}`)
+        navigate(`/video?videoId=${result}&v=${props?.view}&id=${props?.userid}&thumb=${videoId}`)
+
         window.location.reload()
       };
       const timestamp = new Date(props?.timestamp);
@@ -37,7 +38,7 @@ const VideoSearch = (props) =>
         <div className="flex justify-center">
             <div className=' hover:bg-[#dddddd] drop-shadow-xl py-3 px-3 rounded-[20px] border-[3px]  w-[60%] my-[10px] flex cursor-pointer peer peer-focus:bg-[#f2f2f2]' onClick={()=>handleClick(props?.videoId)}>
 
-                <div className="w-[60%] h-[240px] ">
+                <div className="w-[60%] h-[220px] ">
                 <img className='w-full h-full rounded-[20px]' src={props?.img} alt='other'/>
 
                 </div>

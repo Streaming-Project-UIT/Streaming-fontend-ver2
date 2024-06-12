@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Navbar from '../components/NavbarApp';
-import bgWall from '../assets/images/bgWall.jpg'
 import bg from '../assets/images/bg.avif'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { IoIosCloudUpload } from "react-icons/io";  
@@ -230,7 +229,7 @@ const Profile = () => {
                         <p className="text-[24px] font-bold ml-5 mt-2 select-none">Bình luận</p>
                         <div className='w-full px-4 mt-[20px]'>
                             
-                            <Comment/>
+                            <Comment videoId={videoIds[0]}/>
                         </div>
                     </div>:<div></div>
                 }

@@ -4,7 +4,7 @@ import { AiOutlineSend } from "react-icons/ai";
 import axios from 'axios';
 import { useSearchParams } from "react-router-dom";
 
-const Comment = () => {
+const Comment = (props) => {
     const [comments, setComments] = useState([]);
     const [commentText, setCommentText] = useState("");
     const userId = localStorage.getItem('userToken');
@@ -12,7 +12,7 @@ const Comment = () => {
     const lastName = localStorage.getItem('lastName');
     const userName = `${firstName} ${lastName}`;
     const [searchParams] = useSearchParams();
-    const videoId = searchParams.get('videoId');
+    // const videoId = searchParams.get('videoId');
 
     useEffect(() => {
         fetchComments();
@@ -20,7 +20,7 @@ const Comment = () => {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/comment/getALLCommentByVideoId/${videoId}`);
+            const response = await axios.get(`http://localhost:8080/comment/getALLCommentByVideoId/${props?.videoId}`);
             setComments(response.data || []); // Ensure comments is an array
         } catch (error) {
             console.error("Error fetching comments:", error);
@@ -35,7 +35,7 @@ const Comment = () => {
     const handleCommentSubmit = async () => {
         if (commentText.trim()) {
             try {
-                const newComment = { text: commentText, likes: 0, dislikes: 0, videoId: videoId, userId: userId, userName: userName, isRely: false };
+                const newComment = { text: commentText, likes: 0, dislikes: 0, videoId: props.videoId, userId: userId, userName: userName, isRely: false };
                 await axios.post('http://localhost:8080/comment/upload', newComment);
                 setCommentText("");
                 fetchComments(); // Refresh the comments list
@@ -71,10 +71,10 @@ const Comment = () => {
                 comments.map((comment, index) => (
                     <div>
                         {comment.rely?
-                            <div className='ml-[80px]'>
+                            <div className='ml-[50px]'>
                                 <MonoComment key={index} comment={comment} fetchComments={fetchComments} />
                             </div>:
-                            <div className=''>
+                            <div className=' mt-[10px]'>
                                 <MonoComment key={index} comment={comment} fetchComments={fetchComments} />
                             </div>  
 

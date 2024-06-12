@@ -8,6 +8,7 @@ import { FaAngleRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { IoMdSearch } from "react-icons/io";
 import { MdWorkHistory } from "react-icons/md";
+import axios from 'axios';
 
 const NavbarApp = () => {
     // const [avatar, setAvatar] = useState('');
@@ -20,12 +21,19 @@ const NavbarApp = () => {
 
     const vidufullName = localStorage.getItem('firstName')+ ' '+ localStorage.getItem('lastName')
     const [clickAvatar, setClickAvatar] = useState(false);
+    const [clickNoti, setClickNoti] = useState(false);
+
     const [showSearch, setShowSearch] = useState(false)
     const handleClickProfile = (e) =>
     {
 
         setClickAvatar(!clickAvatar);
     }
+    const handleClickNoti = (e) =>
+        {
+    
+            setClickNoti(!clickNoti);
+        }
     const handleClickShowSearch = (e) =>
     {
 
@@ -114,10 +122,12 @@ const NavbarApp = () => {
       }, [showSearch]);
 
     const [results, setResults] = useState([])
+    const [keyD, setKey] = useState()
     const handleFilter = (query) => {
         // if (query.trim() === '') {
         //   setValueIds([])
         // } {
+            setKey(query)
           let filterVideo = values?.filter((f) => {
             console.log('f', f)
             return f.metadata.videoName.toLowerCase().includes(query.toLowerCase());
@@ -127,10 +137,47 @@ const NavbarApp = () => {
         // }
       };
 
-    const handlFind = (list) =>{
-        alert('Hi')
+    const [val, setVal] = useState()
+    const generateThumbnailUrls = async (vd) => {
+        return `http://localhost:8080/video/get/${vd}`
+    };
+    const fetchVideoIds2 = async (vaid) => {
+        try {
+            
+            const response = await axios.get(`http://localhost:8080/video/getDetails/66659db56d770150e9456bc5`);
+            console.log('res', response)
+            if (!response.ok) {
+                throw new Error(`Failed to fetch data for id`);
+                }
+                setVal(response.data);
+        } catch (error) {
+            console.error('Failed to fetch video ids or data:', error);
+        }
+    };        
+                    
+    const handlFind = async(list) =>{
+        // console.log('end',list?.metadata?.videoId )
+        // alert(list?.metadata?.videoId)
+        
+        
+        const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + list.metadata.videoId;
+        const response = await fetch(apiUrl);
+        const result = await response.text();
+        await fetch(`http://localhost:8080/video/updateViews/${list.metadata.videoId}`, {method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+                },})
+        await fetchVideoIds2(result)
+        console.log('val',val)
+        // navigate(`/video?videoId=${list.metadata.videoId}&v=${val?.views}&id=${val?.metadata.userID}&thumb=${result}`)
+        navigate(`/video?videoId=${list.metadata.videoId}&v=$1&id=66288bd4e259000400114d11&thumb=${result}`)
+
     }
-    
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+          navigate(`/search?str=${keyD}`);
+        }
+    };
     return (
         <div className=' justify-between z-50 fixed select-none mb-[2px] drop-shadow-lg bg-white p-0 flex items-center w-full ml-0'>
             <img src={logoApp} className='cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo'/>
@@ -142,6 +189,7 @@ const NavbarApp = () => {
                     <input 
                         onFocus={handleClickShowSearch}
                         onBlur={handleClickHideSearch}
+                        onKeyDown={handleKeyPress}
                         placeholder='Tìm kiếm tại đây'
                         onChange={(event)=>handleFilter(event.target.value)}
                         type='text'
@@ -150,7 +198,7 @@ const NavbarApp = () => {
                     />
                     <div className=' relative'>
 
-                        <IoMdSearch className=' absolute size-[27px] cursor-pointer top-2 left-[-40px]' />
+                        <IoMdSearch onClick={()=>navigate(`/search?str=${keyD}`)} className=' absolute size-[27px] cursor-pointer top-2 left-[-40px]' />
                     </div >
                     {
                         showSearch?
@@ -158,7 +206,7 @@ const NavbarApp = () => {
                                 >
                             {
                                 results.map((list,index) => (
-                                    <div className="hover:bg-[#c5c4c4] flex gap-5 px-7 py-3 items-center cursor-pointer" onClick={()=> handlFind()}>
+                                    <div className="hover:bg-[#c5c4c4] flex gap-5 px-7 py-3 items-center cursor-pointer" onClick={()=> handlFind(list)}>
                                         <IoMdSearch/>
                                         <p>{list.metadata.videoName}</p>
                                     </div>
@@ -196,7 +244,24 @@ const NavbarApp = () => {
                             Tải lên
                             <FiUpload className='ml-[5px]'/>
                         </button>
-                        <IoIosNotificationsOutline className='hover:bg-[#edebeb] rounded-[20px] size-[27px] cursor-pointer  ml-[15px]'/>
+
+
+                        <div className=' relative'>
+                            <IoIosNotificationsOutline onClick={handleClickNoti} className='hover:bg-[#edebeb] rounded-[20px] size-[27px] cursor-pointer  ml-[15px]'/>
+                            <div ref={menuRef}  className={` rounded-[10px] right-[0px] max-w-[400px]  min-w-[250px] top-[50px] w-auto h-auto absolute 
+                                ${!clickNoti?'hidden':' border-[1px] mt-0 bg-white '}`}>
+                                <div className='flex justify-center py-6'>
+                                    <p className=' '>
+                                        Không có thông báo nào
+                                    </p>   
+
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
                         <div className='relative '>
                             <img ref={menuRef} className= 'hover:shadow-md cursor-pointer w-[45px] h-[45px] mr-[30px] my-1 mx-[15px]  rounded-[50%] focus:outline-none focus:shadow-outline'
                                 src={`data:image/jpeg;base64,${avatar}`}

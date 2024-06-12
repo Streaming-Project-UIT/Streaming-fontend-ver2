@@ -14,32 +14,8 @@ const Search = () => {
     const [videoHeight, setVideoHeight] = useState('auto');
   
     const [urlVideo, setUrlVideo] = useState()
-    useEffect(() => {
-      const fetchVideoIds = async () => {
-        try {
-          const response = await fetch(`http://localhost:8080/video/getHistoryByUserId/${localStorage.getItem('userToken')}`);
-          if (!response.ok) {
-            throw new Error('Failed to fetch video ids');
-          }
-          const ids = await response.json();
-          setVideoIds(ids);
-          const fetchDataPromises = ids.map(async id => {
-            console.log(id)
-            const response = await fetch(`http://localhost:8080/video/getDetails/${id}`);
-            if (!response.ok) {
-              throw new Error(`Failed to fetch data for id: ${id}`);
-            }
-            return response.json();
-          });
-          const data = await Promise.all(fetchDataPromises);
-          setValueIds(data);
-        } catch (error) {
-          console.error('Failed to fetch video ids or data:', error);
-        }
-      };
-    
-      fetchVideoIds();
-    }, []);
+
+
     //dang sua
     useEffect(() => {
         const fetchVideoIds = async () => {
@@ -70,11 +46,7 @@ const Search = () => {
       }, []);
   
   
-    const generateThumbnailUrls = () => {
-      return videoIds.map((id) => {
-        return  `http://localhost:8080/video/get/${id}`
-        });
-    };
+
     
     function getSortedIndexes(values) {
       // Kiểm tra xem values có hợp lệ không
@@ -99,16 +71,39 @@ const Search = () => {
   
     }
   
-    const thumbnails =  generateThumbnailUrls();
   
     const [indexs, setIndexs] = useState([])
     useEffect(()=>{
       setIndexs( getSortedIndexes(values))
     },[values])
     const start = 4
+
+
+    const [results, setResults] = useState([])
+    const handleFilter = (query) => {
+        // if (query.trim() === '') {
+        //   setValueIds([])
+        // } {
+          let filterVideo = values?.filter((f) => {
+            console.log('f', f)
+            return f.metadata.videoName.toLowerCase().includes(query.toLowerCase());
+          });
+          const dataList = filterVideo.map(item => item.metadata.videoId);
+          setResults(dataList);
+
+          console.log('values',values)
+        // }
+    };
+    const generateThumbnailUrls = () => {
+      return videoIds.map((id) => {
+        return  `http://localhost:8080/video/get/${id}`
+        });
+    };
+    const thumbnails =  generateThumbnailUrls();
+
     return(
         <div>
-            <NavbarApp/>
+            <NavbarApp handleSearchPage={handleFilter}/>
 
             <div className='h-[60px]'></div>
 
@@ -118,7 +113,7 @@ const Search = () => {
             </div>
             <div className='w-full'>
             {(values && values.length > 0 && thumbnails && thumbnails.length > 0) ? (
-                thumbnails.slice(0).map((url, index) => (
+                thumbnails.slice(0,9).map((url, index) => (
                     <VideoSearch
                         key={videoIds[index]}
                         img={url}
