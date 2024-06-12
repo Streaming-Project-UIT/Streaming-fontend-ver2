@@ -35,13 +35,18 @@ const Comment = () => {
     const handleCommentSubmit = async () => {
         if (commentText.trim()) {
             try {
-                const newComment = { text: commentText, likes: 0, dislikes: 0, videoId: videoId, userId: userId, userName: userName };
+                const newComment = { text: commentText, likes: 0, dislikes: 0, videoId: videoId, userId: userId, userName: userName, isRely: false };
                 await axios.post('http://localhost:8080/comment/upload', newComment);
                 setCommentText("");
                 fetchComments(); // Refresh the comments list
             } catch (error) {
                 console.error("Error uploading comment:", error);
             }
+        }
+    };
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+          handleCommentSubmit();
         }
     };
 
@@ -54,6 +59,7 @@ const Comment = () => {
                     onChange={handleCommentChange}
                     className="px-4 rounded-[10px] py-3 border-[1px] w-[100%]"
                     placeholder="Viết bình luận ..."
+                    onKeyDown={handleKeyPress}
                 />
                 <AiOutlineSend 
                     onClick={handleCommentSubmit} 
@@ -63,12 +69,23 @@ const Comment = () => {
             <div className="h-[80px]"></div>
             {comments.length > 0 ? (
                 comments.map((comment, index) => (
-                    <MonoComment key={index} comment={comment} fetchComments={fetchComments} />
+                    <div>
+                        {comment.rely?
+                            <div className='ml-[80px]'>
+                                <MonoComment key={index} comment={comment} fetchComments={fetchComments} />
+                            </div>:
+                            <div className=''>
+                                <MonoComment key={index} comment={comment} fetchComments={fetchComments} />
+                            </div>  
+
+                        }
+
+                    </div>
                 ))
             ) : (
-                <p className="text-center mt-6">No comments yet. Be the first to comment!</p>
+                <p className="text-center mt-6">Chưa có bình luận nào. Hãy bình luận đầu tiên!</p>
             )}
-        </div>
+        </div>  
     );
 }
 

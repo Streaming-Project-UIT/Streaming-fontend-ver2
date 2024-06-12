@@ -1,18 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react';
 import NavbarApp from '../components/NavbarApp'
-import thumnail from '../assets/images/thumnail.png'
-import { IoIosCloudUpload } from "react-icons/io";  
 import { AiFillLike, AiOutlineLike, AiOutlineDislike  } from "react-icons/ai";
-import st from '../assets/st.mp4'
 import { CiShare1 } from "react-icons/ci";
-import avar from '../assets/images/avar.jpg'
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import { useSearchParams, useParams , useNavigate } from 'react-router-dom';
-import VideoComponentRight from '../components/VideoComponentRight';
+import VideoComponentRight from '../components/VideoCom/VideoComponentRight';
 import Loading from '../components/Loading';
 import Comment from '../components/Comment/Comment'
 import axios from 'axios';
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import CopyButton from '../components/ButtonCustom/CopyButton';
 
 const Video = (props) => {
   const navigate = useNavigate()
@@ -22,10 +20,9 @@ const Video = (props) => {
   const usId = searchParams.get('id')
   const thumbId = searchParams.get('thumb')
   const myId = localStorage.getItem('userToken')
+  const avatar = localStorage.getItem('avatar')
   const [videoInfor, setVideoInfor] = useState()
 
-  const [videoUrls, setVideoUrls] = useState([]);
-  const [showVideo, setShowVideo] = useState(false);
   const [videoIds, setVideoIds] = useState([]);
   const [formatTime, setFormatTime] = useState()
   const [values, setValueIds] = useState();
@@ -53,6 +50,13 @@ const Video = (props) => {
   // }, []);
   const videoRef = useRef(null);
   const [videoHeight, setVideoHeight] = useState('auto');
+  const [inforChannel, setInforChannel] = useState()
+  const notify = (msg,choose) => {
+    if (choose === 1)
+      toast.success(msg)
+    else if (choose === 2) 
+      toast.error(msg)
+  };
 
   useEffect(() => {
     const video = videoRef.current;
@@ -88,7 +92,18 @@ const Video = (props) => {
 
     fetchInforVideo();
   },[])
-
+  useEffect(()=>{
+    const getChannel = async() =>{
+      try {
+        const data = await axios.get(`http://localhost:8080/user/listUserbyId/${usId}`)
+        setInforChannel(data.data)
+        console.log('img',data.data)
+      } catch (error) {
+        notify('Có lỗi khi lấy thông tin từ video',2)
+      }
+    }
+    getChannel()
+  },[])
   const generateVideoUrls = () => {
     return videoIds.map((id) => `http://localhost:8080/video/get/${id}`);
   };
@@ -235,6 +250,8 @@ const thumbnails =  generateThumbnailUrls();
   return (
     <div>
       <NavbarApp/>
+      <ToastContainer position='bottom-right'/>
+
       <div className='h-[60px] '></div>
       <div className='px-[60px] py-[20px] flex'>
         <div className='w-8/12'>
@@ -254,7 +271,7 @@ const thumbnails =  generateThumbnailUrls();
             <div className='font-roboto flex justify-between bg-white pb-[15px] px-[5px] pt-[10px]'>
                 <div>
                   <div className='flex items-center gap-4'>
-                    <img alt='avar' src={avar} className='rounded-[50%] size-[50px] cursor-pointer' onClick={handleClickChannel}/>
+                    <img alt='avar' src={`data:image/jpeg;base64,${inforChannel?.avatar}`} className='rounded-[50%] size-[50px] cursor-pointer' onClick={handleClickChannel}/>
                     <div>
                       <p className='text-[20px] cursor-pointer' onClick={handleClickChannel}>{videoInfor?.metadata.userName}</p>
                       <p className='text-[#606060]'>Theo dõi: {numSub === 'undefined' || numSub === undefined?'0': numSub}</p>
@@ -281,10 +298,11 @@ const thumbnails =  generateThumbnailUrls();
                  
                         }
                     </button>
-                    <button className='items-center h-[50px] ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'>
+                    <CopyButton msg={ window.location.href} className='items-center h-[50px] ml-[20px] flex py-[8px] px-[20px] rounded-[20px] hover:bg-[#e5e5e5] bg-[#f3f3f3]'
+                              handleSuc={()=>notify('Đã copy đường dẫn',1)} handleLos={()=>{notify('Copy thất bại',2)}}>
                         Chia sẻ
                         <CiShare1 className='size-[30px] ml-[5px]'/>
-                    </button>        
+                    </CopyButton>        
                 </div>
             </div>
             <div className=' bg-white'>

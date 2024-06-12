@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import {  useNavigate } from 'react-router-dom';
 
 function formatTimestamp(timestamp) {
@@ -19,8 +20,13 @@ function formatTimestamp(timestamp) {
       return `${days} ngày trước`;
     }
   }
-const VideoComponent = (props) =>
-{
+  
+  const VideoComponent = (props) =>
+  {
+    const [widthVideo, setWidthVideo] = useState(props?.wi)
+    useEffect(()=>{
+      setWidthVideo(widthVideo)
+    }, [])
     const navigate = useNavigate()
     const handleClick = async ( videoId) => {
         const apiUrl = "http://localhost:8080/video/getVideoIdFromThumbnailId/" + videoId;
@@ -30,6 +36,19 @@ const VideoComponent = (props) =>
             headers: {
               'Content-Type': 'application/json'
             },})
+
+        const bodyHis = {
+          userId: localStorage.getItem('userToken'),
+          thumbId: videoId
+        }
+        const formData = new FormData()
+        formData.append('userId', localStorage.getItem('userToken'))
+        formData.append('thumbId', videoId)
+        try {
+          await axios.post(`http://localhost:8080/video/addHistory`, formData);
+        } catch (error) {
+          console.error('Đã xảy ra lỗi:', error);
+        }
         const apiVideo = "http://localhost:8080/video/get/" + result;
         console.log(apiVideo)
         navigate(`/video?videoId=${result}&v=${props?.view}&id=${props?.userid}&thumb=${videoId}`)
@@ -37,9 +56,9 @@ const VideoComponent = (props) =>
       const timestamp = new Date(props?.timestamp);
       const formattedTime = formatTimestamp(timestamp);
     return(
-        <div className='w-3/12  flex'  onClick={()=>handleClick(props?.videoId)}>
+        <div className={`flex w-[405px]`}  onClick={()=>handleClick(props?.videoId)}>
                     <div className='p-[15px] hover:bg-[#dddddd] bg-white mx-4 my-4 mb-10 drop-shadow-lg rounded-[10px] cursor-pointer peer peer-focus:bg-[#f2f2f2]'>
-                        <img className=' w-[370px] h-[220px] rounded-[20px]' src={props?.img} alt='other'/>
+                        <img className=' w-[370px] h-[200px] rounded-[20px]' src={props?.img} alt='other'/>
                         <div className='font-roboto  mr-2  '>
                             <p className='text-[18px] font-medium text-black mt-3 leading-6'>{props?.title}</p>
                             <p className='text-[16px] mt-1'>{props?.username}</p>
