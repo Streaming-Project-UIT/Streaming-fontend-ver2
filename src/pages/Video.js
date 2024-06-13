@@ -84,6 +84,8 @@ const Video = (props) => {
           const mongoTimestamp = new Date(data.metadata.timestamp); // Timestamp của MongoDB
           setFormatTime(formatMongoTimestamp(mongoTimestamp));
           setVideoInfor(data)
+          setVideoName(data.metadata.videoName)
+          setDescipt(data.metadata.description)
         } else {
           console.error('Failed ');
         }
@@ -276,18 +278,20 @@ const Video = (props) => {
       setVideoName(videoInfor?.metadata.videoName)
     }
     const handleClickSaveTiltle= async()=>{
-      // try {
-      //   const data = await axios.put(`http://localhost:8080/video/editDescription/${videoId}?description=${videoName}`)
-      //   notify('Cập nhật mô tả thành công!',1)
-      //   setEditTitle(false)
-      // } catch (error) {
-      //   notify('Cập nhật mô tả thất bại!',2)
-      // }
+      try {
+        const data = await axios.put(`http://localhost:8080/video/editVideoName/${videoId}?videoName=${videoName}`)
+        notify('Cập nhật mô tả thành công!',1)
+        setEditTitle(false)
+      } catch (error) {
+        notify('Cập nhật mô tả thất bại!',2)
+      }
     }
 
   const handleVideoNameChange = (e) => {
     setVideoName(e.target.value);
   };
+  useEffect(()=>{
+  },[showEditTitle, showEditDes, videoName, descipt])
   return (
     <div>
       <NavbarApp/>
@@ -321,7 +325,7 @@ const Video = (props) => {
                           </div>
                           :
                           <div>
-                            {videoInfor?.metadata.videoName}  
+                            {videoName}  
 
                           </div>
 
@@ -380,7 +384,8 @@ const Video = (props) => {
                     <br/>
                     <div className='flex justify-between'>
                       <p className='leading-6 mt-[5px] font-normal'>
-                        {!showEditDes? videoInfor?.metadata.description:''}
+                        {!showEditDes? 
+                          descipt:''}
                       </p>
                       { 
                         usId===myId?
