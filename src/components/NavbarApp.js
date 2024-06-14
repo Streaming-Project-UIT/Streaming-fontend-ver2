@@ -180,7 +180,7 @@ const NavbarApp = () => {
     };
     return (
         <div className=' justify-between z-50 fixed select-none mb-[2px] drop-shadow-lg bg-white p-0 flex items-center w-full ml-0'>
-            <img src={logoApp} className='cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo'/>
+            <img onClick={() => {navigate('/')}} src={logoApp} className='select-none cursor-pointer ml-[40px] m-[5px] w-[50px] h-[50px]' alt='logo' />
             <p className='cursor-pointer text-[30px] text-[#595959] font-bold font-teko ml-[20px] -mx-1 -my-1'
                 onClick={() => {navigate('/')}}
                 >Video Sharing</p>

@@ -19,10 +19,10 @@ code {
 }
 
 .main-header {
-  @apply
+  /* @apply
   text-gray-600 hover:text-gray-400
   font-family: 'Oswald'
-  font-weight: 700;
+  font-weight: 700; */
 }
 
 .main-title {
