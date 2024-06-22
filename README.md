@@ -1,76 +1,144 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+# Video Sharing Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+    <img src="images/logo.png" width="40%" alt="Logo">
+</div>
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+This is a Video Sharing Application built using Spring Boot, React, and MongoDB. The application allows users to register, login, upload videos (including thumbnails and details), view videos, comment on videos, and like videos. 
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- User Registration and Login
+- Video Upload (Video file, thumbnail, and details)
+- Video Viewing
+- Commenting on Videos
+- Liking Videos
+- Video Streaming with HTTP Range Request
+- History and Notification
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Architecture
 
-### `npm test`
+The application follows the Model-View-Controller (MVC) architectural pattern.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Architecture](images/architecture.png)
 
-### `npm run build`
+### Components
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Frontend**: React
+- **Backend**: Spring Boot
+- **Database**: MongoDB
+- **Authentication & Authorization**: Spring Security
+- **Video Processing and Streaming**:
+  - Video Transcoding (FFmpeg)
+  - Streaming Service (HTTP Range Request)
+- **APIs**:
+  - REST APIs
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Use Case
+![UseCase](images/usecase.png)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Database
+![Database](images/database.png)
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Prerequisites
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Java 11 or higher
+- Node.js
+- MySQL or PostgreSQL
+- FFmpeg
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Installation
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Video-Sharing-Project-UIT/Video-Sharing-Backend.git
+   ```
+2. **Backup setup:**
+    - Navigate to the backend directory:
+    ```bash
+    cd Video-Sharing-Backend
+    ```
+    - Configure the database in src/main/resources/application.properties:
+    ```bash
+    spring.datasource.url=jdbc:mysql://localhost:3306/video_sharing_db
+    spring.datasource.username=root
+    spring.datasource.password=yourpassword
+    ```
 
-## Learn More
+    - Build the backend application:
+    ```bash
+    ./mvnw clean install
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    - Run the backend application:
+    ```bash
+    ./mvnw spring-boot:run
+    ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. **Frontend Setup:**
+    - Clone Repository
+    ```bash
+    git clone https://github.com/Video-Sharing-Project-UIT/Video-Sharing-Frontend.git
+    ```
+    - Navigate to the frontend directory:
+    ```bash
+    cd Video-Sharing-Frontend
+    ```
+    - Install dependencies:
+    ```bash
+    npm install
+    ```
 
-### Code Splitting
+    - Start the frontend application:
+    ```bash
+    npm start
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Usage
+1. **Home Page:**
+    - Main page choose video
+![MainPage](images/home.png)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. **View video:**
+    - Browse and view videos uploaded by users.
+![ViewVideo](images/viewVideo.png)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+3. **Upload video:**
+    - Navigate to the upload section and upload your video along with the thumbnail and details.
+![Upload](images/upload.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-"# Streaming-Frontend" 
-=======
-# Video-Sharing-frontend
-Video-Sharing-frontend
->>>>>>> 2e99a8f (Update README.md)
+
+6. **History:**
+
+
+7. **Notification:**
+
+
+## Contributors
+- [Trinh Tan Dat](https://github.com/Trinh-Tan-Dat)
+- [Nguyen Thanh Dang](https://github.com/thelight3007)
+
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Contact
+
+## Demo
+
+
+## Report
+
+For detailed information about the project, please refer to the [project report](images/Report.pdf).
+
+
+
